@@ -1,6 +1,7 @@
 export default function Profile() {
     const profileStyle = {
-        border: '1px solid black',
+        border: '1px solid white',
+        color:'white',
         borderRadius: '100px',
         width: '50px',
         height: '50px',

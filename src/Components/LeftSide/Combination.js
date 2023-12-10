@@ -1,10 +1,12 @@
 export default function Combination() {
     const combinationStyle = {
-        border: '1px solid black',
+        border: '1px solid white',
         borderRadius: '100px',
         width: '50px',
         height: '50px',
-        marginBottom: '20px'
+        marginBottom: '20px',
+        color:'white',
+
 
     }
     return (

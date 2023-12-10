@@ -11,7 +11,7 @@ export default function RightSide({ windowWidth, windowHeight }) {
         height: `${windowHeight/2}px`,
         marginTop: `-${windowHeight / 4}px`,
         padding: "10px",
-        backgroundColor:'white',
+        // backgroundColor:'white',
         color: "black",
         textAlign: "center",
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
