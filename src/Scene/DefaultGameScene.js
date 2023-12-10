@@ -7,7 +7,6 @@ import { DragControls } from 'three/addons/controls/DragControls.js';
 
 export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
-    
 
     const scene = new THREE.Scene();
 
@@ -89,6 +88,30 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
         // 컨트롤 가능한 카메라 생성
         const controls = new OrbitControls(camera, renderer.domElement);
 
+
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        const onDocumentMouseDown = (event) => {
+            event.preventDefault();
+      
+            // 마우스 좌표 설정
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      
+            // Raycaster로 Scene에서 클릭된 객체 확인
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(scene.children);
+      
+            // 클릭된 객체에 대한 동작 수행
+            if (intersects.length > 0) {
+              const clickedObject = intersects[0];
+              console.log('Clicked on', clickedObject);
+            }
+          };
+      
+          // Three.js 렌더러에 마우스 이벤트 추가
+          renderer.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
+          
         function animate() {
             requestAnimationFrame(animate);
             controls.update(); // 카메라 컨트롤 하기위해 꼭 실행하는 함수
