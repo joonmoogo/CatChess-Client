@@ -1,5 +1,10 @@
 export default function BuyXP() {
+
+    function buyXPHandler(event){
+        console.log('buyXP button was clicked');
+    }
+
     return (
-        <div>BuyXP</div>
+        <button onClick={buyXPHandler}>BuyXP</button>
     )
 }

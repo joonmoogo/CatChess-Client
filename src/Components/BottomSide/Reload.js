@@ -1,5 +1,8 @@
 export default function Reload() {
+    function reloadHandler(event){
+        console.log('Reload button was clicked');
+    }
     return (
-        <div>Reload</div>
+        <button onClick={reloadHandler}>Reload</button>
     )
 }
