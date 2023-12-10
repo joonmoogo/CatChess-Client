@@ -5,6 +5,7 @@ import RightSide from './Components/RightSide/RightSide';
 import TopSide from './Components/TopSide/TopSide';
 import BottomSide from './Components/BottomSide/BottomSide';
 import DefaultGameScene from './Scene/DefaultGameScene';
+import React from 'react';
 import { useEffect, useState } from 'react';
 
 function App() {
@@ -36,7 +37,7 @@ function GUI({ children }) {
       <BottomSide windowWidth={windowWidth} windowHeight={windowHeight} />
       <TopSide windowWidth={windowWidth} windowHeight={windowHeight} />
       <LeftSide windowWidth={windowWidth} windowHeight={windowHeight} />
-      {children}
+      {React.cloneElement(children, { windowWidth, windowHeight })}
     </>
   );
 }

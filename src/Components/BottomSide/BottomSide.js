@@ -14,6 +14,7 @@ export default function BottomSide({ windowWidth, windowHeight }) {
     height: `${height}px`,
     marginLeft: `-${windowWidth / 4}px`,
     padding: "10px",
+    backgroundColor:'white',
     color: "black",
     textAlign: "center",
     boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.1)",
