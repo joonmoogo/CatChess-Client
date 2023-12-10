@@ -1,25 +1,27 @@
 import logo from './logo.svg';
 import './App.css';
-
+import LeftSide from './Components/LeftSide/LeftSide';
+import RightSide from './Components/RightSide/RightSide';
+import TopSide from './Components/TopSide/TopSide';
+import BottomSide from './Components/BottomSide/BottomSide';
+import DefaultGameScene from './Scene/DefaultGameScene';
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Editss <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <GUI>
+        <DefaultGameScene />
+      </GUI>
   );
+}
+
+function GUI() {
+  return (
+    <>
+      <LeftSide />
+      <RightSide />
+      <BottomSide />
+      <TopSide />
+    </>
+  )
 }
 
 export default App;
