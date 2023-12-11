@@ -7,6 +7,7 @@ import BottomSide from './Components/BottomSide/BottomSide';
 import DefaultGameScene from './Scene/DefaultGameScene';
 import React from 'react';
 import { useEffect, useState } from 'react';
+import Modal from './Components/Modal/Modal';
 
 function App() {
   return (
@@ -33,10 +34,13 @@ function GUI({ children }) {
 
   return (
     <>
-      <RightSide windowWidth={windowWidth} windowHeight={windowHeight} />
-      <BottomSide windowWidth={windowWidth} windowHeight={windowHeight} />
-      <TopSide windowWidth={windowWidth} windowHeight={windowHeight} />
-      <LeftSide windowWidth={windowWidth} windowHeight={windowHeight} />
+    <Modal windowWidth={windowWidth} windowHeight={windowHeight}/>
+      <div>
+        <RightSide windowWidth={windowWidth} windowHeight={windowHeight} />
+        <BottomSide windowWidth={windowWidth} windowHeight={windowHeight} />
+        <TopSide windowWidth={windowWidth} windowHeight={windowHeight} />
+        <LeftSide windowWidth={windowWidth} windowHeight={windowHeight} />
+      </div>
       {React.cloneElement(children, { windowWidth, windowHeight })}
     </>
   );

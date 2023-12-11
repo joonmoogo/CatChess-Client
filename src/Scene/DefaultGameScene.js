@@ -63,6 +63,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
         // 그림자 생성 허용
         cube.castShadow = true;
+        cube.name='testCube';
         scene.add(cube);
         
         
@@ -71,7 +72,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
         const groundGeometry = new THREE.PlaneGeometry(100, 100);
         const groundMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
         const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-
+        ground.name='ground';
         // 바닥 객체를 바닥처럼 눕히기 위해 X축을 90도 회전
         ground.rotation.x = Math.PI * -0.5;
         // 바닥 객체를 중앙에서 아래로 위치 설정
@@ -101,11 +102,11 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             // Raycaster로 Scene에서 클릭된 객체 확인
             raycaster.setFromCamera(mouse, camera);
             const intersects = raycaster.intersectObjects(scene.children);
-      
             // 클릭된 객체에 대한 동작 수행
             if (intersects.length > 0) {
               const clickedObject = intersects[0];
               console.log('Clicked on', clickedObject);
+            //   console.log(clickedObject.object.name);
             }
           };
       
