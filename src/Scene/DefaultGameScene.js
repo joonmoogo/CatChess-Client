@@ -10,7 +10,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
     const scene = new THREE.Scene();
 
-    const renderer = new THREE.WebGLRenderer();
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(windowWidth, windowHeight);
 
     renderer.shadowMap.enabled = true;
@@ -50,10 +50,10 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
     const axes = new THREE.AxesHelper(5);
     scene.add(axes);
 
-    
+
     useEffect(() => {
         containerRef.current.appendChild(renderer.domElement);
-        
+
         // 박스 객체
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         // MeshBasicMaterial은 조명에 반응하지 않음, MeshStandardMaterial을 사용
@@ -63,16 +63,16 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
         // 그림자 생성 허용
         cube.castShadow = true;
-        cube.name='testCube';
+        cube.name = 'testCube';
         scene.add(cube);
-        
-        
+
+
 
         // 평면 바닥 객체
         const groundGeometry = new THREE.PlaneGeometry(100, 100);
         const groundMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
         const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-        ground.name='ground';
+        ground.name = 'ground';
         // 바닥 객체를 바닥처럼 눕히기 위해 X축을 90도 회전
         ground.rotation.x = Math.PI * -0.5;
         // 바닥 객체를 중앙에서 아래로 위치 설정
@@ -81,41 +81,88 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
         ground.receiveShadow = true;
         scene.add(ground);
 
+        const gridHelper = new THREE.GridHelper(100, 100);
+        scene.add(gridHelper);
 
         const camera = new THREE.PerspectiveCamera(100, windowWidth / windowHeight, 1, 1000);
         scene.add(camera);
-        camera.position.set(2, 2, 2);
+        camera.position.set(0, 2, 20);
 
         // 컨트롤 가능한 카메라 생성
-        const controls = new OrbitControls(camera, renderer.domElement);
+        const orbitcontrols = new OrbitControls(camera, renderer.domElement);
+        const 가로 = 6;
+        const 세로 = 6;
 
+        // Cylinder를 담을 배열
+        const cylinders = [];
 
+        const radius = 5; // 기본 반지름
+        const height = 10; // 기본 높이
+
+        const totalWidth = radius * 2 * 가로;
+        const totalHeight = radius * 2 * 세로;
+
+        for (let i = 1; i <= 세로; i++) {
+            for (let j = 1; j <= 가로; j++) {
+                console.log(j,i);
+                // Cylinder 생성
+                const geometry = new THREE.CylinderGeometry(radius, radius, height, 6);
+                const material = new THREE.MeshStandardMaterial({ color: 0xffff00 });
+                const cylinder = new THREE.Mesh(geometry, material);
+
+                // 정 가운데 위치 계산
+                let x = radius * 2 * (j - (가로 + 1) / 2);
+                let y = 0;
+                let z = radius * 2 * (i - (세로 + 1) / 2);
+
+                // i가 2의 배수이면서 첫 번째 열일 때, z 위치에 20 추가
+                if (i % 2 == 0) {
+                    x += radius;
+                }
+                cylinder.position.set(x, y, z);
+                cylinder.castShadow = true;
+                scene.add(cylinder);
+                cylinders.push(cylinder);
+            }
+        }
+
+        // const dragcontrols = new DragControls([gridHelper], camera, renderer.domElement);
+        // dragcontrols.enabled=false;
+
+        // dragcontrols.addEventListener('hoveron', (event) => {
+        // console.log(event);
+        // })
+        // dragcontrols.addEventListener('hoverOff', (event) => {
+        // orbitcontrols.enabled=true;
+        // })
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
         const onDocumentMouseDown = (event) => {
             event.preventDefault();
-      
+
             // 마우스 좌표 설정
             mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-      
+
             // Raycaster로 Scene에서 클릭된 객체 확인
             raycaster.setFromCamera(mouse, camera);
             const intersects = raycaster.intersectObjects(scene.children);
             // 클릭된 객체에 대한 동작 수행
             if (intersects.length > 0) {
-              const clickedObject = intersects[0];
-              console.log('Clicked on', clickedObject);
-            //   console.log(clickedObject.object.name);
+                const clickedObject = intersects[0];
+                console.log('Clicked on', clickedObject);
+                cube.position.x = clickedObject.point.x
+                cube.position.y = clickedObject.point.y
+                cube.position.z = clickedObject.point.z
             }
-          };
-      
-          // Three.js 렌더러에 마우스 이벤트 추가
-          renderer.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
-          
+        };
+
+        // Three.js 렌더러에 마우스 이벤트 추가
+        renderer.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
+
         function animate() {
             requestAnimationFrame(animate);
-            controls.update(); // 카메라 컨트롤 하기위해 꼭 실행하는 함수
+            // orbitcontrols.update(); // 카메라 컨트롤 하기위해 꼭 실행하는 함수
             axes.rotation.x += 0.005;
             axes.rotation.y += 0.005;
             cube.rotation.x += 0.005;

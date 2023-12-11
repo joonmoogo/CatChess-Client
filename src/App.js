@@ -27,6 +27,8 @@ function GUI({ children }) {
       setWindowHeight(window.innerHeight);
     };
     window.addEventListener('resize', handleResize);
+
+    window.addEventListener('mousemove',(event)=>{});
     return () => {
       window.removeEventListener('resize', handleResize);
     };

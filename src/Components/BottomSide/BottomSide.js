@@ -4,9 +4,9 @@ import CharacterCard from "./CharacterCard";
 import Reload from "./Reload";
 
 export default function BottomSide({ windowWidth, windowHeight }) {
-    
+
   const scaleRatio = 1;
-  const height = 100;
+  const height = 150;
 
   const bottomSideStyle = {
     position: "fixed",
@@ -16,9 +16,9 @@ export default function BottomSide({ windowWidth, windowHeight }) {
     height: `${height}px`,
     marginLeft: `-${windowWidth / 4}px`,
     padding: "10px",
-    // backgroundColor:'white',
     color: "black",
     boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.1)",
+    display: "flex", // 수정된 부분
     transform: `scale(${scaleRatio})`,
     transformOrigin: "bottom left",
   };
@@ -34,15 +34,17 @@ export default function BottomSide({ windowWidth, windowHeight }) {
 
   const characterCardContainerStyle = {
     display: "flex",
+    flexDirection: "row", // 수정된 부분
     justifyContent: "space-between",
-    alignItems: "flex-start", // Align items to the top
-    marginTop: "10px",
+    alignItems: "flex-start",
+    flex: 1, // 수정된 부분
+    marginLeft: "10px", // 수정된 부분
   };
 
   return (
     <div style={bottomSideStyle}>
       <div style={stackBoxStyle}>
-        <BuyXP/>
+        <BuyXP />
         <Reload />
       </div>
       <div style={characterCardContainerStyle}>
