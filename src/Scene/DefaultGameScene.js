@@ -9,6 +9,7 @@ import { MapControls } from 'three/addons/controls/MapControls.js';
 
 export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
+    let pawns = [];
     let isDragging = false;
     const containerRef = useRef();
 
@@ -66,7 +67,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
         const textureLoader = new THREE.TextureLoader();
         const cubeTextureLoader = new THREE.CubeTextureLoader();
-        const maptexture = textureLoader.load('/star.png');
+        const maptexture = textureLoader.load('/star2.jpg');
         const mapGeometry = new THREE.BoxGeometry(700, 700, 700);
         const mapMaterial = new THREE.MeshBasicMaterial({ map: maptexture, side: THREE.DoubleSide });
         const map = new THREE.Mesh(mapGeometry, mapMaterial);
@@ -104,7 +105,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
 
         controls.minDistance = 200;
-        controls.maxDistance = 1350;
+        controls.maxDistance = 350;
 
         controls.maxPolarAngle = Math.PI / 2;
         const 가로 = 5;
@@ -140,6 +141,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
             // Scene에 몸통과 오른팔 추가
             scene.add(pawnWhite);
+            pawns.push(pawnWhite);
         }
         for (let i = -40; i <= 30; i += 10) {
             var pawnWhite = new THREE.Mesh(
@@ -162,6 +164,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
             // Scene에 몸통과 오른팔 추가
             scene.add(pawnWhite);
+            // pawns.push(pawnWhite);
         }
 
         for (let i = 1; i <= 2; i++) {
@@ -199,13 +202,22 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
                 cylinder.position.set(x - cylinderRadius / 2, y / 2, z);
                 cylinder.castShadow = true;
                 scene.add(cylinder);
-                cylinders.push(cylinder);
+                if(i>세로/2){
+                    cylinders.push(cylinder);
+                }
             }
         }
 
 
-        // const dragcontrols = new DragControls([gridHelper], camera, renderer.domElement);
+        const dragcontrols = new DragControls([...pawns], camera, renderer.domElement);
         // dragcontrols.enabled=false;
+        dragcontrols.addEventListener('dragstart',(()=>{
+            controls.enabled = false;
+        }))
+
+        dragcontrols.addEventListener('dragend',(()=>{
+            controls.enabled = true;
+        }))
 
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
@@ -223,13 +235,10 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
                 const FindedObject = intersects[0];
 
                 const objectName = FindedObject.object.name;
-                if (objectName) {
-                    console.log(`im ${objectName}`);
-                }
-                if (isDragging) {
-                    // console.log(event);
-                    console.log(FindedObject);
-                    pawnWhite.position.set(FindedObject.point.x, cylinderHeight * 2, FindedObject.point.z + 1);
+                console.log(`im ${objectName}`);
+                switch (objectName) {
+                    case 'cylinder':
+                        FindedObject.object.material.color.set(1,1,1);
                 }
             }
         };
@@ -249,13 +258,44 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
                 if (objectname == 'unit') {
                     // isDragging = !isDragging;
                     // console.log(objectname);
-                    console.log(FindedObject);
+                    console.log(FindedObject.object);
+                    console.log(pawns[0]);
+                    if(pawns.includes(FindedObject.object)){
+                        FindedObject.object.material.color.set(1,1,1);
+                    }
+                }
+            }
+        };
+
+        
+        const onDocumentMouseUp = (event) => {
+            event.preventDefault();
+            // 마우스 좌표 설정
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            // Raycaster로 Scene에서 클릭된 객체 확인
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(scene.children);
+            // 클릭된 객체에 대한 동작 수행
+            if (intersects.length > 0) {
+                const FindedObject = intersects[0];
+                const objectname = FindedObject.object.name;
+                if (objectname == 'unit') {
+                    // isDragging = !isDragging;
+                    // console.log(objectname);
+                    console.log(FindedObject.object);
+                    console.log(pawns[0]);
+                    if(pawns.includes(FindedObject.object)){
+                        FindedObject.object.material.color.set(0,0,1);
+                    }
                 }
             }
         };
 
         renderer.domElement.addEventListener('mousemove', onDocumentMouseMove, false);
         renderer.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
+        renderer.domElement.addEventListener('mouseup', onDocumentMouseUp, false);
+        
 
 
         function animate() {
