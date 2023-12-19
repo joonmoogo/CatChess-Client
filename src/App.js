@@ -8,12 +8,16 @@ import DefaultGameScene from './Scene/DefaultGameScene';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import Modal from './Components/Modal/Modal';
-
+import { } from './Util/Redux/actionTypes';
+import { Provider } from 'react-redux';
+import store from './Util/Redux/store';
 function App() {
   return (
-    <GUI>
-      <DefaultGameScene />
-    </GUI>
+    <Provider store={store}>
+      <GUI>
+        <DefaultGameScene />
+      </GUI>
+    </Provider>
   );
 }
 
@@ -28,7 +32,7 @@ function GUI({ children }) {
     };
     window.addEventListener('resize', handleResize);
 
-    window.addEventListener('mousemove',(event)=>{});
+    window.addEventListener('mousemove', (event) => { });
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -36,7 +40,7 @@ function GUI({ children }) {
 
   return (
     <>
-    <Modal windowWidth={windowWidth} windowHeight={windowHeight}/>
+      <Modal windowWidth={windowWidth} windowHeight={windowHeight} />
       <div>
         <RightSide windowWidth={windowWidth} windowHeight={windowHeight} />
         <BottomSide windowWidth={windowWidth} windowHeight={windowHeight} />

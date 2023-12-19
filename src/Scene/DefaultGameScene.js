@@ -12,13 +12,6 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
     let isDragging = false;
     const containerRef = useRef();
 
-    // const lightHelper = new THREE.DirectionalLightHelper(directionalLight, 1, 0xff0000);
-    // // 장면에 조명 시각화 객체 추가
-    // scene.add(lightHelper);
-
-    // // axesHelper는 x,y,z의 위치 선형으로 나타냄
-    // const axes = new THREE.AxesHelper(5);
-    // scene.add(axes);
 
 
     useEffect(() => {
@@ -54,19 +47,29 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
         const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
 
         // position.set으로 조명의 위치(x,y,z)를 변경할 수 있음
-        directionalLight.position.set(-1, 1, 1);
+        directionalLight.position.set(100, 100, -100);
         // 조명에 그림자 생성 허용
         directionalLight.castShadow = true;
         scene.add(directionalLight);
+
+        // const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 2);
+        // hemiLight.color.setHSL(0.6, 1, 0.6);
+        // hemiLight.groundColor.setHSL(0.095, 1, 0.75);
+        // hemiLight.position.set(0, 50, 0);
+        // scene.add(hemiLight);
+        const lightHelper = new THREE.DirectionalLightHelper(directionalLight, 1, 0xff0000);
+        // 장면에 조명 시각화 객체 추가
+        scene.add(lightHelper);
+    
         containerRef.current.appendChild(renderer.domElement);
 
 
         const textureLoader = new THREE.TextureLoader();
         const cubeTextureLoader = new THREE.CubeTextureLoader();
         const maptexture = textureLoader.load('/star.png');
-        const mapGeometry = new THREE.BoxGeometry(700,700,700);
-        const mapMaterial = new THREE.MeshBasicMaterial({map:maptexture,side:THREE.DoubleSide});
-        const map = new THREE.Mesh(mapGeometry,mapMaterial);
+        const mapGeometry = new THREE.BoxGeometry(700, 700, 700);
+        const mapMaterial = new THREE.MeshBasicMaterial({ map: maptexture, side: THREE.DoubleSide });
+        const map = new THREE.Mesh(mapGeometry, mapMaterial);
         scene.add(map);
 
         // 평면 바닥 객체
@@ -79,7 +82,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
         // 바닥 객체를 중앙에서 아래로 위치 설정
         ground.position.set(0, -6.1, 0);
         // 그림자 받기 허용
-        ground.receiveShadow = true;
+        // ground.receiveShadow = true;
         scene.add(ground);
 
         // const gridHelper = new THREE.GridHelper(100, 100);
@@ -101,7 +104,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
 
         controls.minDistance = 200;
-        controls.maxDistance = 350;
+        controls.maxDistance = 1350;
 
         controls.maxPolarAngle = Math.PI / 2;
         const 가로 = 5;
@@ -119,20 +122,44 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
                 new THREE.BoxGeometry(2, 4, 2), // 수정된 부분
                 new THREE.MeshStandardMaterial({ color: 0x0fffff })
             );
-        
+
+            pawnWhite.receiveShadow=true
+
             // 오른팔 생성
             const armGeometry = new THREE.BoxGeometry(1, 1, 0.5); // 수정된 부분
             const armMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
             var armMesh = new THREE.Mesh(armGeometry, armMaterial);
-        
+
             // 오른팔을 몸통에 붙이기
             armMesh.position.set(1, 0, 0);
             pawnWhite.add(armMesh); // 수정된 부분
-            pawnWhite.name='unit'
-        
+            pawnWhite.name = 'unit'
+
             // 몸통 위치 설정
             pawnWhite.position.set(i, 1, 50); // 수정된 부분
-        
+
+            // Scene에 몸통과 오른팔 추가
+            scene.add(pawnWhite);
+        }
+        for (let i = -40; i <= 30; i += 10) {
+            var pawnWhite = new THREE.Mesh(
+                new THREE.BoxGeometry(2, 4, 2), // 수정된 부분
+                new THREE.MeshStandardMaterial({ color: 0x0fffff })
+            );
+
+            // 오른팔 생성
+            const armGeometry = new THREE.BoxGeometry(1, 1, 0.5); // 수정된 부분
+            const armMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+            var armMesh = new THREE.Mesh(armGeometry, armMaterial);
+
+            // 오른팔을 몸통에 붙이기
+            armMesh.position.set(1, 0, 0);
+            pawnWhite.add(armMesh); // 수정된 부분
+            pawnWhite.name = 'unit'
+
+            // 몸통 위치 설정
+            pawnWhite.position.set(i, 1, -50); // 수정된 부분
+
             // Scene에 몸통과 오른팔 추가
             scene.add(pawnWhite);
         }
@@ -140,10 +167,6 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
         for (let i = 1; i <= 2; i++) {
             const groundGeometry = new THREE.PlaneGeometry(100, 15, 10, 1);
             const groundMaterial = new THREE.MeshLambertMaterial({ color: 0xffff00 });
-            for (let i = 0; i < groundGeometry.attributes.position.array.length; i += 3) {
-                const color = new THREE.Color(Math.random(), Math.random(), Math.random());
-            }
-
             const ground = new THREE.Mesh(groundGeometry, groundMaterial);
             ground.name = 'groundForUnit';
             // 바닥 객체를 바닥처럼 눕히기 위해 X축을 90도 회전
@@ -151,9 +174,10 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             // 바닥 객체를 중앙에서 아래로 위치 설정
             ground.position.set(0, -1, i == 1 ? 50 : -50);
             // 그림자 받기 허용
-            ground.receiveShadow = true;
+            // ground.receiveShadow = true;
             scene.add(ground);
         }
+
         for (let i = 1; i <= 세로; i++) {
             for (let j = 1; j <= 가로; j++) {
 
@@ -162,7 +186,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
                 const geometry = new THREE.CylinderGeometry(cylinderRadius, cylinderRadius, cylinderHeight, 6);
                 const material = new THREE.MeshStandardMaterial({ color: i > 세로 / 2 ? 0xfff00 : 0xff0000 });
                 const cylinder = new THREE.Mesh(geometry, material);
-
+                cylinder.receiveShadow=true;
                 // 정 가운데 위치 계산
                 let x = cylinderRadius * 2 * (j - (가로 + 1) / 2);
                 let y = cylinderHeight / 2;
@@ -243,7 +267,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             // cube.rotation.x += 0.005;
             // cube.rotation.y += 0.005;
             // pawnWhite.rotation.x +=0.1;
-            armMesh.rotation.x +=0.1;
+            armMesh.rotation.x += 0.1;
             renderer.render(scene, camera);
         }
 
