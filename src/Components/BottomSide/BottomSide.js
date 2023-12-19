@@ -48,11 +48,11 @@ export default function BottomSide({ windowWidth, windowHeight }) {
         <Reload />
       </div>
       <div style={characterCardContainerStyle}>
+        <CharacterCard onClick={(event)=>{console.log(event)}}/>
         <CharacterCard />
         <CharacterCard />
         <CharacterCard />
-        <CharacterCard />
-        <CharacterCard />
+        
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-export default function CharacterCard() {
+export default function CharacterCard(props) {
     const cardStyle={
         border:'1px solid white',
         color:'white',
@@ -6,6 +6,6 @@ export default function CharacterCard() {
         width:'20%'
     }
     return (
-        <div style={cardStyle}>CharacterCard</div>
+        <div style={cardStyle} onClick={props.onClick}>CharacterCard</div>
     )
 }
