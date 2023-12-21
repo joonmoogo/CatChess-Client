@@ -11,6 +11,8 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
     let pawns = [];
     let isDragging = null;
+    let gravity = new THREE.Vector3(0, -0.01, 0);
+
     const containerRef = useRef();
 
     useEffect(() => {
@@ -73,17 +75,18 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
         controls.maxDistance = 350;
         controls.maxPolarAngle = Math.PI / 2;
 
+
         for (let i = -30; i <= 40; i += 10) {
             var pawnWhite = new THREE.Mesh(
                 new THREE.BoxGeometry(2, 4, 2), // 수정된 부분
-                new THREE.MeshStandardMaterial({ color: 0x0fffff })
+                new THREE.MeshStandardMaterial({ color: Math.random() * 0xffffff })
             );
 
             pawnWhite.receiveShadow = true
 
             // 오른팔 생성
             const armGeometry = new THREE.BoxGeometry(1, 1, 0.5); // 수정된 부분
-            const armMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+            const armMaterial = new THREE.MeshStandardMaterial({ color: Math.random() * 0xffffff });
             var armMesh = new THREE.Mesh(armGeometry, armMaterial);
 
             // 오른팔을 몸통에 붙이기
@@ -172,6 +175,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             }
         }
 
+
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
 
@@ -214,7 +218,9 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
                                 FindedObject.object.position.y + cylinderHeight,
                                 FindedObject.object.position.z
                             );
+                            throwBall(isDragging);
                             isDragging = null;
+
                         }
                         break;
 
@@ -229,6 +235,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
                     case 'groundForUnit':
                         break;
+
                 }
             }
         };
@@ -257,11 +264,43 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
         // renderer.domElement.addEventListener('mouseup', onDocumentMouseUp, false);`
 
 
+        function throwBall(unit) {            
+            const initialPosition = unit.position.clone();
+            const geometry = new THREE.SphereGeometry(0.2, 32, 32);
+            const material = new THREE.MeshBasicMaterial({ color: Math.random() *0xff0000 });
+            const ball = new THREE.Mesh(geometry, material);
+            scene.add(ball);
+
+            const initialVelocity = new THREE.Vector3(0, 0.5, -0.5);
+            const gravity = new THREE.Vector3(0, -0.01, 0);
+        
+            let time = 0;
+            function updatePosition() {
+                const displacement = new THREE.Vector3();
+                
+                displacement.copy(initialVelocity)
+                    .multiplyScalar(time)
+                    .add(gravity.clone().multiplyScalar(0.5 * time * time));
+        
+                ball.position.copy(initialPosition).add(displacement);
+        
+                time += 1;
+        
+                if (ball.position.y <= 0) {
+                    time = 0;
+                    
+                }
+        
+                requestAnimationFrame(updatePosition);
+            }
+        
+            updatePosition();
+        }
+        
 
         function animate() {
             requestAnimationFrame(animate);
             controls.update();
-            armMesh.rotation.x += 0.1;
             renderer.render(scene, camera);
         }
 
