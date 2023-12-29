@@ -14,6 +14,8 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
     let selectedObject = null;
     const initialVelocity = new THREE.Vector3(0, 0.6, -0.5);
     const gravity = new THREE.Vector3(0, -0.01, 0);
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
 
     const containerRef = useRef();
 
@@ -101,18 +103,12 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             const armMaterial = new THREE.MeshStandardMaterial({ color: Math.random() * 0xffffff });
             const armMesh = new THREE.Mesh(armGeometry, armMaterial);
 
-            // 오른팔을 몸통에 붙이기
-            // armMesh.position.set(1, 0, 0);
             armMesh.rotation.x = Math.PI * -0.5;
             armGroup.add(armMesh);
-            armGroup.position.set(-1, 1, 0); // 어깨 위치로 조정
-
-            pawnWhite.add(armGroup); // 수정된 부분
+            armGroup.position.set(-1, 1, 0);
+            pawnWhite.add(armGroup); 
             pawnWhite.name = 'unit'
-
-            // 몸통 위치 설정
-            pawnWhite.position.set(i, 1, 50); // 수정된 부분
-
+            pawnWhite.position.set(i, 1, 50);
             const healthBarGeometry = new THREE.BoxGeometry(2.2, 0.2, 0.2);
             const healthBarMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
             const healthBarMesh = new THREE.Mesh(healthBarGeometry, healthBarMaterial);
@@ -127,6 +123,12 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             healthBars.push(healthBarMesh);
             // Scene에 몸통과 오른팔 추가
             scene.add(pawnWhite);
+            function updateHealthBarPosition() {
+                healthBarMesh.position.set(0, 4, 0);        
+                healthBarMesh.quaternion.copy(camera.quaternion);
+                requestAnimationFrame(updateHealthBarPosition)
+            }
+            updateHealthBarPosition();
             pawns.push(pawnWhite);
         }
         for (let i = -40; i <= 30; i += 10) {
@@ -157,8 +159,12 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             // Scene에 몸통과 오른팔 추가
             scene.add(pawnWhite);
             
-
-            // pawns.push(pawnWhite);
+            function updateHealthBarPosition() {
+                healthBarMesh.position.set(0, 4, 0);        
+                healthBarMesh.quaternion.copy(camera.quaternion);
+                requestAnimationFrame(updateHealthBarPosition)
+            }
+            updateHealthBarPosition();
         }
 
         for (let i = 1; i <= 2; i++) {
@@ -210,11 +216,6 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
                 }
             }
         }
-
-
-        const raycaster = new THREE.Raycaster();
-        const mouse = new THREE.Vector2();
-
         const onDocumentMouseMove = (event) => {
             event.preventDefault();
             mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -375,6 +376,9 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
             updatePosition();
         }
+
+
+        
 
         function animate() {
             requestAnimationFrame(animate);
