@@ -9,8 +9,9 @@ import { MapControls } from 'three/addons/controls/MapControls.js';
 
 export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
+    
     let pawns = [];
-    let isDragging = null;
+    let selectedObject = null;
     const initialVelocity = new THREE.Vector3(0, 0.6, -0.5);
     const gravity = new THREE.Vector3(0, -0.01, 0);
 
@@ -112,6 +113,18 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             // 몸통 위치 설정
             pawnWhite.position.set(i, 1, 50); // 수정된 부분
 
+            const healthBarGeometry = new THREE.BoxGeometry(2.2, 0.2, 0.2);
+            const healthBarMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+            const healthBarMesh = new THREE.Mesh(healthBarGeometry, healthBarMaterial);
+
+            healthBarMesh.position.set(0, 4, 0);
+            pawnWhite.add(healthBarMesh);
+
+            healthBarMesh.scale.set(1, 1, 1);
+            healthBarMesh.position.set(0, 4, 0);
+
+            const healthBars = [];
+            healthBars.push(healthBarMesh);
             // Scene에 몸통과 오른팔 추가
             scene.add(pawnWhite);
             pawns.push(pawnWhite);
@@ -132,11 +145,18 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             pawnWhite.add(armMesh); // 수정된 부분
             pawnWhite.name = 'unit'
 
+            const healthBarGeometry = new THREE.BoxGeometry(2.2, 0.2, 0.2);
+            const healthBarMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+            const healthBarMesh = new THREE.Mesh(healthBarGeometry, healthBarMaterial);
+
+            healthBarMesh.position.set(0, 4, 0);
+            pawnWhite.add(healthBarMesh);
             // 몸통 위치 설정
             pawnWhite.position.set(i, 1, -50); // 수정된 부분
 
             // Scene에 몸통과 오른팔 추가
             scene.add(pawnWhite);
+            
 
             // pawns.push(pawnWhite);
         }
@@ -204,8 +224,8 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             if (intersects.length > 0) {
                 const FindedObject = intersects[0];
                 const objectName = FindedObject.object.name;
-                if (isDragging) {
-                    isDragging.position.copy(FindedObject.point.add(new THREE.Vector3(0, 0, 4)))
+                if (selectedObject) {
+                    selectedObject.position.copy(FindedObject.point.add(new THREE.Vector3(0, 0, 4)))
 
                 }
                 else {
@@ -233,25 +253,22 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
                 switch (objectname) {
                     case 'cylinder':
                         // moveUnit(pawns[0],new THREE THREE.Vector3)
-                        if (isDragging) {
-                            isDragging.position.set(
+                        if (selectedObject) {
+                            selectedObject.position.set(
                                 FindedObject.object.position.x,
                                 FindedObject.object.position.y + cylinderHeight,
                                 FindedObject.object.position.z
                             );
-                            const target = new THREE.Vector3(10, 9, 10);
-                            throwBall(isDragging, target);
-                            moveUnit(isDragging,target)
-                            isDragging = null;
+                            selectedObject = null;
                         }
                         break;
 
                     case 'unit':
-                        if (!isDragging) {
-                            isDragging = FindedObject.object;
+                        if (!selectedObject) {
+                            selectedObject = FindedObject.object;
                         }
                         else {
-                            isDragging = null;
+                            selectedObject = null;
                         }
                         break;
 
@@ -283,43 +300,13 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
         renderer.domElement.addEventListener('mousemove', onDocumentMouseMove, false);
         renderer.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
-        // renderer.domElement.addEventListener('mouseup', onDocumentMouseUp, false);`
 
-
-        // function throwBall(unit) {
-        //     const initialPosition = unit.position;
-        //     const initialVelocity = new THREE.Vector3(0, 0.6, -0.5);
-        //     const gravity = new THREE.Vector3(0, -0.01, 0);
-        //     const geometry = new THREE.SphereGeometry(0.5, 32, 32);
-        //     const material = new THREE.MeshStandardMaterial({ color: Math.random() * 0xff0000 });
-        //     const ball = new THREE.Mesh(geometry, material);
-        //     // ball.castShadow=true;
-        //     scene.add(ball);
-        //     let time = 0;
-        //     function updatePosition() {
-        //         const displacement = new THREE.Vector3();
-
-        //         displacement.copy(initialVelocity)
-        //             .multiplyScalar(time)
-        //             .add(gravity.clone().multiplyScalar(0.5 * time * time));
-
-        //         ball.position.copy(initialPosition).add(displacement);
-
-        //         time += 1;
-
-        //         if (ball.position.y <= 0) {
-        //             time = 0;
-        //         }
-        //         requestAnimationFrame(updatePosition);
-        //     }
-        //     updatePosition();
-        // }
         function throwBall(unit, targetPosition) {
             const gravity = new THREE.Vector3(0, -0.008, 0);
             const initialPosition = unit.position;
             const initialVelocity = calculateInitialVelocity(initialPosition, targetPosition);
             const geometry = new THREE.SphereGeometry(0.5, 32, 32);
-            const material = new THREE.MeshStandardMaterial({ color: Math.random() * 0xff0000 });
+            const material = new THREE.MeshBasicMaterial({ color: Math.random() * 0xff0000 });
             const ball = new THREE.Mesh(geometry, material);
             scene.add(ball);
             let time = 0;
@@ -352,10 +339,10 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             const jumpHeight = 20; // Adjust this value to control the jump height
             const initialPosition = unit.position.clone();
             const initialVelocity = calculateInitialVelocity(initialPosition, targetPosition);
-        
+
             let time = 0;
             let isJumping = true;
-        
+
             function calculateInitialVelocity(start, end) {
                 const displacement = end.clone().sub(start);
                 const timeToReachTarget = Math.sqrt(2 * jumpHeight / Math.abs(gravity.y));
@@ -364,38 +351,30 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
                 initialVelocity.y = initialVelocityY;
                 return initialVelocity;
             }
-        
+
             function updatePosition() {
                 const displacement = new THREE.Vector3();
                 displacement.copy(initialVelocity)
                     .multiplyScalar(time)
                     .add(gravity.clone().multiplyScalar(0.5 * time * time));
-        
+
                 unit.position.copy(initialPosition).add(displacement);
                 time += 1;
-        
+
                 if (isJumping && unit.position.y <= jumpHeight) {
-                    // Start the landing phase
                     isJumping = false;
                     time = 0;
                 }
-        
                 if (!isJumping && unit.position.y <= 4.99) {
-                    // Reset time when landing is complete
                     time = 0;
                 }
-        
                 if (isJumping || unit.position.y > 4.99) {
-                    // Continue animation if jumping or above the ground
                     requestAnimationFrame(updatePosition);
                 }
             }
-        
+
             updatePosition();
         }
-        
-
-
 
         function animate() {
             requestAnimationFrame(animate);
