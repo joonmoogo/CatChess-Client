@@ -95,18 +95,8 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             );
 
             pawnWhite.receiveShadow = true
+            
 
-            // 오른팔 생성 
-            const armGroup = new THREE.Object3D();
-
-            const armGeometry = new THREE.BoxGeometry(0.5, 0.5, 3); // 길이, 높이, 너비
-            const armMaterial = new THREE.MeshStandardMaterial({ color: Math.random() * 0xffffff });
-            const armMesh = new THREE.Mesh(armGeometry, armMaterial);
-
-            armMesh.rotation.x = Math.PI * -0.5;
-            armGroup.add(armMesh);
-            armGroup.position.set(-1, 1, 0);
-            pawnWhite.add(armGroup); 
             pawnWhite.name = 'unit'
             pawnWhite.position.set(i, 1, 50);
             const healthBarGeometry = new THREE.BoxGeometry(2.2, 0.2, 0.2);

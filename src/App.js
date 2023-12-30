@@ -11,7 +11,13 @@ import Modal from './Components/Modal/Modal';
 import { } from './Util/Redux/actionTypes';
 import { Provider } from 'react-redux';
 import store from './Util/Redux/store';
+import Socket from './Util/Socket/Socket';
+
 function App() {
+
+  useEffect(() => {
+    Socket.init();
+  }, [])
   return (
     <Provider store={store}>
       <GUI>
