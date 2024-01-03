@@ -34,7 +34,7 @@ class Socket {
                     break;
                 case "gameMatched": // 게임 매칭 완료
                     break;
-                case "shopUpdate": // 총 맞음 
+                case "shopUpdate": // 상점 고양이 업데이트 
                     break;
                 case "expUpdate": // 경험치 업데이트
                     break;
@@ -42,7 +42,7 @@ class Socket {
                     break;
                 case "resGiveItem": // 보유 아이템 수정
                     break;
-                case "stateUpdate": // 
+                case "stateUpdate": // 게임 상태 업데이트 ex) 대기상태 10초 or 대전상태 10초
                     break;
                 case "stageUpdate":
                     break;
@@ -56,7 +56,7 @@ class Socket {
                     break;
                 case "dropItem":
                     break;
-                case "moneyUpdate":
+                case "moneyUpdate": // 돈 업데이트
                     break;
                 case "boardUpdate":
                     break;
@@ -76,6 +76,30 @@ class Socket {
                     console.log(msg);
                     break;
             }
+            // 기본 시나리오
+            /**
+             * 1) newPlayer 입장
+             * 2) newPlayer 입장
+             * 3) 게임 매치 완료
+             * 4) 스테이지 업데이트 round:1 stage:1
+             * 5) 상태 업데이트 state:arrange, time:10
+             * 6) 상점 업데이트 player:id, shop: cats[4]
+             * 7) 돈 업데이트 player:id, money:160
+             * 8) 레벨 업데이트 player:id, level:2
+             * 9) 경험치 업데이트 player:id, exp:0
+             * 10) 상태 업데이트 state:ready, time:3
+             **/
+
+            // 대전 시나리오
+            /**
+             * 1) 배틀 업데이트 board : array[array[]]
+             * 2) 상태 업데이트 : state:battle, time:30
+             * 3) winning업데이트 : player:id, winning:1
+             * 4) losing업데이트 : player:id, losing:0
+             * 5) 배틀 결과
+             * 
+             */
+            
         };
         Socket.socket.onclose = function (event) {
             console.log("웹 소켓 연결 해제");
