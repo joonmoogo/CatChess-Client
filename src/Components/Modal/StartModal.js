@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Card from "./Card";
+import { Socket } from '../../Util/Socket/Socket';
 
-export default function Modal({ windowWidth, windowHeight }) {
+export default function StartModal({ windowWidth, windowHeight }) {
     const [modalOpen, setModalOpen] = useState(true);
 
     const closeModal = () => {
@@ -29,20 +30,20 @@ export default function Modal({ windowWidth, windowHeight }) {
         textAlign: "center",
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
         display: "flex",
-        justifyContent: "space-between",
         backdropFilter: "blur(5px)",
         WebkitBackdropFilter: "blur(5px)",
         transition: "backdrop-filter 0.3s ease",
     };
 
+    const handleCardClick=()=>{
+        Socket.sendMsg("startWaiting", "");
+    }
+
     return (
         <>
             {modalOpen ? <div onClick={closeModal} style={modalStyle}>
-                <Card name='name' content='content' />
-                <Card name='name' content='content' />
-                <Card name='name' content='content' />
+                <Card name='게임 시작' content='하려면 클릭' onClick={handleCardClick} />
             </div> : null}
-
         </>
     );
 }

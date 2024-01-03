@@ -1,4 +1,4 @@
-export default function Card({name, content}) {
+export default function Card({name, content, onClick}) {
     const cardStyle = {
         width: '300px',
         padding: '20px',
@@ -20,7 +20,7 @@ export default function Card({name, content}) {
     };
 
     return (
-        <div style={cardStyle}>
+        <div style={cardStyle} onClick={onClick}>
             <h2 style={titleStyle}>{name}</h2>
             <p style={contentStyle}>{content}</p>
         </div>

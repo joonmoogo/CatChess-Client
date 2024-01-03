@@ -7,10 +7,10 @@ import BottomSide from './Components/BottomSide/BottomSide';
 import DefaultGameScene from './Scene/DefaultGameScene';
 import React from 'react';
 import { useEffect, useState } from 'react';
-import Modal from './Components/Modal/Modal';
-
 import Socket from './Util/Socket/Socket';
 import SocketProvider from './Util/Socket/Socket';
+import CardModal from './Components/Modal/CardModal';
+import StartModal from './Components/Modal/StartModal';
 
 function App() {
 
@@ -42,7 +42,7 @@ function GUI({ children }) {
 
   return (
     <>
-      <Modal windowWidth={windowWidth} windowHeight={windowHeight} />
+      <StartModal windowWidth={windowWidth} windowHeight={windowHeight} />
       <div>
         <RightSide windowWidth={windowWidth} windowHeight={windowHeight} />
         <BottomSide windowWidth={windowWidth} windowHeight={windowHeight} />
