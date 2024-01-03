@@ -8,22 +8,18 @@ import DefaultGameScene from './Scene/DefaultGameScene';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import Modal from './Components/Modal/Modal';
-import { } from './Util/Redux/actionTypes';
-import { Provider } from 'react-redux';
-import store from './Util/Redux/store';
+
 import Socket from './Util/Socket/Socket';
+import SocketProvider from './Util/Socket/Socket';
 
 function App() {
 
-  useEffect(() => {
-    Socket.init();
-  }, [])
   return (
-    <Provider store={store}>
+    <SocketProvider>
       <GUI>
         <DefaultGameScene />
       </GUI>
-    </Provider>
+    </SocketProvider>
   );
 }
 
@@ -57,5 +53,6 @@ function GUI({ children }) {
     </>
   );
 }
+
 
 export default App;

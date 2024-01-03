@@ -2,14 +2,8 @@ import { useEffect } from "react";
 import BuyXP from "./BuyXP";
 import CharacterCard from "./CharacterCard";
 import Reload from "./Reload";
-import { connect } from "react-redux";
-import { clickUnitCard } from "../../Util/Redux/actions";
 
-function BottomSide({windowWidth,windowHeight}) {
-
- useEffect(()=>{
-  clickUnitCard();
- },[])
+export default function BottomSide({windowWidth,windowHeight}) {
 
   const scaleRatio = 1;
   const height = 150;
@@ -63,5 +57,3 @@ function BottomSide({windowWidth,windowHeight}) {
     </div>
   );
 }
-
-export default connect()(BottomSide);

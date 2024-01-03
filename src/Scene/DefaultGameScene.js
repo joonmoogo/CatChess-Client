@@ -181,8 +181,6 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
         for (let i = 1; i <= 세로; i++) {
             for (let j = 1; j <= 가로; j++) {
-
-                console.log(j, i);
                 // Cylinder 생성
                 const geometry = new THREE.CylinderGeometry(cylinderRadius, cylinderRadius, cylinderHeight, 6);
                 const material = new THREE.MeshStandardMaterial({ color: i > 세로 / 2 ? 0xfff00 : 0xff0000 });

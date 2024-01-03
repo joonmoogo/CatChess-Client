@@ -11,9 +11,9 @@ export default function Combination() {
     }
     return (
         <>
-            {[1, 2, 3, 4, 5].map((e) => {
+            {[1, 2, 3, 4, 5].map((e,i) => {
                 return (
-                    <div style={combinationStyle}>
+                    <div key={i} style={combinationStyle}>
                         <div id="image">combi</div>
                         <div id="blood">{Math.round(Math.random() * 100 + 1)}</div>
                     </div>

@@ -10,9 +10,9 @@ export default function Profile() {
     }
     return (
         <>
-            {[1, 2, 3, 4, 5].map((e) => {
+            {[1, 2, 3, 4, 5].map((e,i) => {
                 return (
-                    <div style={profileStyle}>
+                    <div key={i} style={profileStyle}>
                         <div id="image">profile</div>
                         <div id="blood">{Math.round(Math.random() * 100 + 1)}</div>
                     </div>

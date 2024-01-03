@@ -1,7 +1,9 @@
-export default class Socket{
+import { useEffect } from "react";
+
+class Socket {
     static socket = null;
     static id = localStorage.getItem('id');
-    
+
     static sendMsg(type, data) {
         Socket.socket.send(
             JSON.stringify({
@@ -12,32 +14,35 @@ export default class Socket{
         );
     }
 
-    static init(){
+
+    static init() {
         Socket.socket = new WebSocket('ws://localhost:4000');
 
-        Socket.socket.onopen = function(event){
+        Socket.socket.onopen = function (event) {
             console.log('웹 소켓 연결 성공');
+            Socket.sendMsg("startWaiting", "");
         }
+        // 메세지 받았을 때 동작
         Socket.socket.onmessage = function (event) {
             const msg = JSON.parse(event.data);
             const { type, data } = msg;
             if (type !== "timeUpdate") console.log(msg);
             switch (type) {
-                case "resNewId":
+                case "resNewId": // 새 아이디 받음
                     break;
-                case "newPlayer":
+                case "newPlayer": // 새 플레이어가 대기열 입장함
                     break;
-                case "gameMatched":
+                case "gameMatched": // 게임 매칭 완료
                     break;
-                case "shopUpdate":
+                case "shopUpdate": // 총 맞음 
                     break;
-                case "expUpdate":
+                case "expUpdate": // 경험치 업데이트
                     break;
-                case "levelUpdate":
+                case "levelUpdate": // 레벨 업데이트
                     break;
-                case "resGiveItem":
+                case "resGiveItem": // 보유 아이템 수정
                     break;
-                case "stateUpdate":
+                case "stateUpdate": // 
                     break;
                 case "stageUpdate":
                     break;
@@ -63,13 +68,12 @@ export default class Socket{
                     break;
                 case "timeUpdate":
                     break;
-    
                 case "winningUpdate":
                     break;
-    
                 case "losingUpdate":
                     break;
                 default:
+                    console.log(msg);
                     break;
             }
         };
@@ -81,4 +85,12 @@ export default class Socket{
         };
     }
 
+}
+export default function SocketProvider({ children }) {
+    useEffect(() => {
+        Socket.init();
+    }, []);
+    return <>
+        {children}
+    </>;
 }
