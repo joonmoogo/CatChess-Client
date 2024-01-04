@@ -1,6 +1,7 @@
 import Timer from "./Timer";
 
-export default function TopSide({ windowWidth, windowHeight }) {
+export default function TopSide({ windowWidth, windowHeight, time, stage }) {
+
   const scaleRatio = 1;
   const height = 50;
 
@@ -22,7 +23,7 @@ export default function TopSide({ windowWidth, windowHeight }) {
 
   return (
     <div style={topSideStyle}>
-      <Timer />
+      <Timer time={time} stage={stage} />
     </div>
   );
 }
