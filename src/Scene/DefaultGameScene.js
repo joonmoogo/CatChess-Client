@@ -8,6 +8,9 @@ import Ground from './MeshClass/Ground';
 import Control from './MeshClass/Control';
 import GroundForUnit from './MeshClass/GroundForUnit';
 import Cylinder from './MeshClass/Cylinder';
+import HealthBar from './MeshClass/HealthBar';
+import Arm from './MeshClass/Arm';
+import Pawn from './MeshClass/Pawn';
 
 // 
 
@@ -25,7 +28,6 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
     useEffect(() => {
         const scene = new THREE.Scene();
-        // scene.fog = new THREE.FogExp2( 0xefd1b5, 0.0015 );
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(windowWidth, windowHeight);
@@ -60,69 +62,33 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
         const controls = new Control(camera, renderer.domElement);
 
         for (let i = -30; i <= 40; i += 10) {
-            var pawnWhite = new THREE.Mesh(
-                new THREE.BoxGeometry(2, 4, 2), // 수정된 부분
-                new THREE.MeshStandardMaterial({ color: Math.random() * 0xffffff })
-            );
+            const pawnWhite = new Pawn([i,1,50],0x0fffff)          
+            const arm = new Arm();
+            pawnWhite.mesh.add(arm.mesh);
+            const healthBar = new HealthBar();
+            pawnWhite.mesh.add(healthBar.mesh);
+            scene.add(pawnWhite.mesh);
 
-            pawnWhite.receiveShadow = true
-
-
-            pawnWhite.name = 'unit'
-            pawnWhite.position.set(i, 1, 50);
-            const healthBarGeometry = new THREE.BoxGeometry(2.2, 0.2, 0.2);
-            const healthBarMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-            const healthBarMesh = new THREE.Mesh(healthBarGeometry, healthBarMaterial);
-
-            healthBarMesh.position.set(0, 4, 0);
-            pawnWhite.add(healthBarMesh);
-
-            healthBarMesh.scale.set(1, 1, 1);
-            healthBarMesh.position.set(0, 4, 0);
-
-            const healthBars = [];
-            healthBars.push(healthBarMesh);
-            // Scene에 몸통과 오른팔 추가
-            scene.add(pawnWhite);
             function updateHealthBarPosition() {
-                healthBarMesh.position.set(0, 4, 0);
-                healthBarMesh.quaternion.copy(camera.quaternion);
+                healthBar.mesh.position.set(0, 4, 0);
+                healthBar.mesh.quaternion.copy(camera.quaternion);
                 requestAnimationFrame(updateHealthBarPosition)
             }
             updateHealthBarPosition();
             pawns.push(pawnWhite);
         }
         for (let i = -40; i <= 30; i += 10) {
-            var pawnWhite = new THREE.Mesh(
-                new THREE.BoxGeometry(2, 4, 2), // 수정된 부분
-                new THREE.MeshStandardMaterial({ color: 0x0fffff, roughness: 0 })
-            );
 
-            // 오른팔 생성
-            const armGeometry = new THREE.BoxGeometry(1, 1, 0.5); // 수정된 부분
-            const armMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-            const armMesh = new THREE.Mesh(armGeometry, armMaterial);
-
-            // 오른팔을 몸통에 붙이기
-            armMesh.position.set(1, 0, 0);
-            pawnWhite.add(armMesh); // 수정된 부분
-            pawnWhite.name = 'unit'
-
-            const healthBarGeometry = new THREE.BoxGeometry(2.2, 0.2, 0.2);
-            const healthBarMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-            const healthBarMesh = new THREE.Mesh(healthBarGeometry, healthBarMaterial);
-
-            healthBarMesh.position.set(0, 4, 0);
-            pawnWhite.add(healthBarMesh);
-            // 몸통 위치 설정
-            pawnWhite.position.set(i, 1, -50); // 수정된 부분
-
-            // Scene에 몸통과 오른팔 추가
-            scene.add(pawnWhite);
+            const pawnWhite = new Pawn([i,1,-50],0x0fffff)          
+            const arm = new Arm();
+            pawnWhite.mesh.add(arm.mesh);
+            const healthBar = new HealthBar();
+            pawnWhite.mesh.add(healthBar.mesh);
+            scene.add(pawnWhite.mesh);
 
             function updateHealthBarPosition() {
-                healthBarMesh.position.set(0, 4, 0);
-                healthBarMesh.quaternion.copy(camera.quaternion);
+                healthBar.mesh.position.set(0, 4, 0);
+                healthBar.mesh.quaternion.copy(camera.quaternion);
                 requestAnimationFrame(updateHealthBarPosition)
             }
             updateHealthBarPosition();

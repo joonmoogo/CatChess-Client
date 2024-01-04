@@ -8,6 +8,6 @@ export default class Pawn{
         );
         this.mesh.receiveShadow = true;
         this.mesh.name='unit';
-        this.mesh.position.copy(position);
+        this.mesh.position.set(...position);
     }
 }
