@@ -3,13 +3,17 @@ import { useEffect, useRef, useState } from 'react';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // orbitControls는 카메라 컨트롤
 import { DragControls } from 'three/addons/controls/DragControls.js';
-import { MapControls } from 'three/addons/controls/MapControls.js';
+import Map from './MeshClass/Map';
+import Ground from './MeshClass/Ground';
+import Control from './MeshClass/Control';
+import GroundForUnit from './MeshClass/GroundForUnit';
+import Cylinder from './MeshClass/Cylinder';
 
 // 
 
 export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
-    
+
     let pawns = [];
     let selectedObject = null;
     const initialVelocity = new THREE.Vector3(0, 0.6, -0.5);
@@ -40,53 +44,20 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
         directionalLight.castShadow = true;
         scene.add(directionalLight);
 
-        // const secondLight = new THREE.DirectionalLight(0xffffff, 2);
-        // secondLight.position.set(-100, 100, 100);
-        // secondLight.castShadow = true;
-        // scene.add(secondLight);
-
-
         const lightHelper = new THREE.DirectionalLightHelper(directionalLight, 0.11, 0xff0000);
-        // const lightHelper2 = new THREE.DirectionalLightHelper(secondLight,0.1,0xff0ff0);
         scene.add(lightHelper);
-        // scene.add(lightHelper2)
 
-        const textureLoader = new THREE.TextureLoader();
-        const maptexture = textureLoader.load('/star2.jpg');
-        const mapGeometry = new THREE.BoxGeometry(700, 700, 700);
-        const mapMaterial = new THREE.MeshBasicMaterial({ map: maptexture, side: THREE.DoubleSide });
-        const map = new THREE.Mesh(mapGeometry, mapMaterial);
-        scene.add(map);
+        const map = new Map('/star2.jpg');
+        scene.add(map.mesh);
 
-        // 평면 바닥 객체
-        const groundGeometry = new THREE.BoxGeometry(100, 100, 10);
-        const groundMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
-        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-        ground.name = 'ground';
-        // 바닥 객체를 바닥처럼 눕히기 위해 X축을 90도 회전
-        ground.rotation.x = Math.PI * -0.5;
-        // 바닥 객체를 중앙에서 아래로 위치 설정
-        ground.position.set(0, -6.1, 0);
-        // 그림자 받기 허용
-        // ground.receiveShadow = true;
-        scene.add(ground);
-
-        // const gridHelper = new THREE.GridHelper(100, 100);
-        // scene.add(gridHelper);
+        const ground = new Ground(0xffffff);
+        scene.add(ground.mesh);
 
         const camera = new THREE.PerspectiveCamera(20, windowWidth / windowHeight, 1, 1000);
-        scene.add(camera);
         camera.position.set(0, 2, 20);
+        scene.add(camera);
 
-        // 컨트롤 가능한 카메라 생성
-        const controls = new MapControls(camera, renderer.domElement);
-        controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
-        controls.dampingFactor = 0.05;
-        controls.screenSpacePanning = false;
-        controls.minDistance = 200;
-        controls.maxDistance = 350;
-        controls.maxPolarAngle = Math.PI / 2;
-
+        const controls = new Control(camera, renderer.domElement);
 
         for (let i = -30; i <= 40; i += 10) {
             var pawnWhite = new THREE.Mesh(
@@ -95,7 +66,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             );
 
             pawnWhite.receiveShadow = true
-            
+
 
             pawnWhite.name = 'unit'
             pawnWhite.position.set(i, 1, 50);
@@ -114,7 +85,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             // Scene에 몸통과 오른팔 추가
             scene.add(pawnWhite);
             function updateHealthBarPosition() {
-                healthBarMesh.position.set(0, 4, 0);        
+                healthBarMesh.position.set(0, 4, 0);
                 healthBarMesh.quaternion.copy(camera.quaternion);
                 requestAnimationFrame(updateHealthBarPosition)
             }
@@ -148,29 +119,19 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
             // Scene에 몸통과 오른팔 추가
             scene.add(pawnWhite);
-            
+
             function updateHealthBarPosition() {
-                healthBarMesh.position.set(0, 4, 0);        
+                healthBarMesh.position.set(0, 4, 0);
                 healthBarMesh.quaternion.copy(camera.quaternion);
                 requestAnimationFrame(updateHealthBarPosition)
             }
             updateHealthBarPosition();
         }
 
-        for (let i = 1; i <= 2; i++) {
-            const groundGeometry = new THREE.PlaneGeometry(100, 15, 10, 1);
-            const groundMaterial = new THREE.MeshLambertMaterial({ color: 0xffff00 });
-            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-            ground.name = 'groundForUnit';
-            // 바닥 객체를 바닥처럼 눕히기 위해 X축을 90도 회전
-            ground.rotation.x = Math.PI * -0.5;
-            // 바닥 객체를 중앙에서 아래로 위치 설정
-            ground.position.set(0, -1, i == 1 ? 50 : -50);
-            // 그림자 받기 허용
-            // ground.receiveShadow = true;
-            scene.add(ground);
-        }
-
+        const enemyGround = new GroundForUnit([0, -1, -50], 0xffff00);
+        scene.add(enemyGround.mesh);
+        const myGround = new GroundForUnit([0, -1, 50], 0xffff00);
+        scene.add(myGround.mesh);
 
 
         const cylinders = [];
@@ -190,7 +151,6 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
                 let x = cylinderRadius * 2 * (j - (가로 + 1) / 2);
                 let y = cylinderHeight / 2;
                 let z = cylinderRadius * 2 * (i - (세로 + 1) / 2);
-
                 if (i % 2 != 0) {
                     x += cylinderRadius;
                 }
@@ -204,6 +164,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
                 }
             }
         }
+
         const onDocumentMouseMove = (event) => {
             event.preventDefault();
             mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -224,7 +185,6 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
                     case 'cylinder':
 
                     case 'unit':
-
                 }
             }
         };
@@ -245,7 +205,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
                         if (selectedObject) {
                             selectedObject.position.set(
                                 FindedObject.object.position.x,
-                                FindedObject.object.position.y + cylinderHeight,
+                                FindedObject.object.position.y + 4,
                                 FindedObject.object.position.z
                             );
                             selectedObject = null;
@@ -322,7 +282,6 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             updatePosition();
         }
 
-
         function moveUnit(unit, targetPosition) {
             const gravity = new THREE.Vector3(0, -0.008, 0);
             const jumpHeight = 20; // Adjust this value to control the jump height
@@ -366,15 +325,13 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
         }
 
 
-        
+
 
         function animate() {
             requestAnimationFrame(animate);
-            controls.update();
+            controls.control.update();
             renderer.render(scene, camera);
-
         }
-
         animate();
 
         camera.position.z = 100;
