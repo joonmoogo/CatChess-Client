@@ -3,14 +3,14 @@ import { useEffect, useRef, useState } from 'react';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // orbitControls는 카메라 컨트롤
 import { DragControls } from 'three/addons/controls/DragControls.js';
-import Map from './MeshClass/Map';
-import Ground from './MeshClass/Ground';
-import Control from './MeshClass/Control';
-import GroundForUnit from './MeshClass/GroundForUnit';
-import Cylinder from './MeshClass/Cylinder';
-import HealthBar from './MeshClass/HealthBar';
-import Arm from './MeshClass/Arm';
-import Pawn from './MeshClass/Pawn';
+import Map from './CustomMeshClass/Map';
+import Ground from './CustomMeshClass/Ground';
+import Control from './CustomMeshClass/Control';
+import GroundForUnit from './CustomMeshClass/GroundForUnit';
+import Cylinder from './CustomMeshClass/Cylinder';
+import HealthBar from './CustomMeshClass/HealthBar';
+import Arm from './CustomMeshClass/Arm';
+import Pawn from './CustomMeshClass/Pawn';
 
 // 
 
@@ -216,79 +216,79 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
         renderer.domElement.addEventListener('mousemove', onDocumentMouseMove, false);
         renderer.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
 
-        function throwBall(unit, targetPosition) {
-            const gravity = new THREE.Vector3(0, -0.008, 0);
-            const initialPosition = unit.position;
-            const initialVelocity = calculateInitialVelocity(initialPosition, targetPosition);
-            const geometry = new THREE.SphereGeometry(0.5, 32, 32);
-            const material = new THREE.MeshBasicMaterial({ color: Math.random() * 0xff0000 });
-            const ball = new THREE.Mesh(geometry, material);
-            scene.add(ball);
-            let time = 0;
-            function calculateInitialVelocity(start, end) {
-                const displacement = end.clone().sub(start);
-                const timeToReachTarget = Math.sqrt(2 * displacement.y / Math.abs(gravity.y));
-                const initialVelocityY = -gravity.y * timeToReachTarget / 2;
-                const initialVelocity = displacement.clone().divideScalar(timeToReachTarget);
-                initialVelocity.y = initialVelocityY;
-                return initialVelocity;
-            }
-            function updatePosition() {
-                const displacement = new THREE.Vector3();
-                displacement.copy(initialVelocity)
-                    .multiplyScalar(time)
-                    .add(gravity.clone().multiplyScalar(0.5 * time * time));
-                ball.position.copy(initialPosition).add(displacement);
-                time += 1;
-                if (ball.position.y <= 2) {
-                    time = 0;
-                }
-                requestAnimationFrame(updatePosition);
-            }
-            updatePosition();
-        }
+        // function throwBall(unit, targetPosition) {
+        //     const gravity = new THREE.Vector3(0, -0.008, 0);
+        //     const initialPosition = unit.position;
+        //     const initialVelocity = calculateInitialVelocity(initialPosition, targetPosition);
+        //     const geometry = new THREE.SphereGeometry(0.5, 32, 32);
+        //     const material = new THREE.MeshBasicMaterial({ color: Math.random() * 0xff0000 });
+        //     const ball = new THREE.Mesh(geometry, material);
+        //     scene.add(ball);
+        //     let time = 0;
+        //     function calculateInitialVelocity(start, end) {
+        //         const displacement = end.clone().sub(start);
+        //         const timeToReachTarget = Math.sqrt(2 * displacement.y / Math.abs(gravity.y));
+        //         const initialVelocityY = -gravity.y * timeToReachTarget / 2;
+        //         const initialVelocity = displacement.clone().divideScalar(timeToReachTarget);
+        //         initialVelocity.y = initialVelocityY;
+        //         return initialVelocity;
+        //     }
+        //     function updatePosition() {
+        //         const displacement = new THREE.Vector3();
+        //         displacement.copy(initialVelocity)
+        //             .multiplyScalar(time)
+        //             .add(gravity.clone().multiplyScalar(0.5 * time * time));
+        //         ball.position.copy(initialPosition).add(displacement);
+        //         time += 1;
+        //         if (ball.position.y <= 2) {
+        //             time = 0;
+        //         }
+        //         requestAnimationFrame(updatePosition);
+        //     }
+        //     updatePosition();
+        // }
 
-        function moveUnit(unit, targetPosition) {
-            const gravity = new THREE.Vector3(0, -0.008, 0);
-            const jumpHeight = 20; // Adjust this value to control the jump height
-            const initialPosition = unit.position.clone();
-            const initialVelocity = calculateInitialVelocity(initialPosition, targetPosition);
+        // function moveUnit(unit, targetPosition) {
+        //     const gravity = new THREE.Vector3(0, -0.008, 0);
+        //     const jumpHeight = 20; // Adjust this value to control the jump height
+        //     const initialPosition = unit.position.clone();
+        //     const initialVelocity = calculateInitialVelocity(initialPosition, targetPosition);
 
-            let time = 0;
-            let isJumping = true;
+        //     let time = 0;
+        //     let isJumping = true;
 
-            function calculateInitialVelocity(start, end) {
-                const displacement = end.clone().sub(start);
-                const timeToReachTarget = Math.sqrt(2 * jumpHeight / Math.abs(gravity.y));
-                const initialVelocityY = -gravity.y * timeToReachTarget / 2;
-                const initialVelocity = displacement.clone().divideScalar(timeToReachTarget);
-                initialVelocity.y = initialVelocityY;
-                return initialVelocity;
-            }
+        //     function calculateInitialVelocity(start, end) {
+        //         const displacement = end.clone().sub(start);
+        //         const timeToReachTarget = Math.sqrt(2 * jumpHeight / Math.abs(gravity.y));
+        //         const initialVelocityY = -gravity.y * timeToReachTarget / 2;
+        //         const initialVelocity = displacement.clone().divideScalar(timeToReachTarget);
+        //         initialVelocity.y = initialVelocityY;
+        //         return initialVelocity;
+        //     }
 
-            function updatePosition() {
-                const displacement = new THREE.Vector3();
-                displacement.copy(initialVelocity)
-                    .multiplyScalar(time)
-                    .add(gravity.clone().multiplyScalar(0.5 * time * time));
+        //     function updatePosition() {
+        //         const displacement = new THREE.Vector3();
+        //         displacement.copy(initialVelocity)
+        //             .multiplyScalar(time)
+        //             .add(gravity.clone().multiplyScalar(0.5 * time * time));
 
-                unit.position.copy(initialPosition).add(displacement);
-                time += 1;
+        //         unit.position.copy(initialPosition).add(displacement);
+        //         time += 1;
 
-                if (isJumping && unit.position.y <= jumpHeight) {
-                    isJumping = false;
-                    time = 0;
-                }
-                if (!isJumping && unit.position.y <= 4.99) {
-                    time = 0;
-                }
-                if (isJumping || unit.position.y > 4.99) {
-                    requestAnimationFrame(updatePosition);
-                }
-            }
+        //         if (isJumping && unit.position.y <= jumpHeight) {
+        //             isJumping = false;
+        //             time = 0;
+        //         }
+        //         if (!isJumping && unit.position.y <= 4.99) {
+        //             time = 0;
+        //         }
+        //         if (isJumping || unit.position.y > 4.99) {
+        //             requestAnimationFrame(updatePosition);
+        //         }
+        //     }
 
-            updatePosition();
-        }
+        //     updatePosition();
+        // }
 
 
 
