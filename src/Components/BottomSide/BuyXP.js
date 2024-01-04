@@ -1,4 +1,4 @@
-export default function BuyXP() {
+export default function BuyXP({exp}) {
 
     const buttonStyle={
         color:'white',
@@ -10,6 +10,6 @@ export default function BuyXP() {
     }
 
     return (
-        <div style={buttonStyle} onClick={buyXPHandler}>BuyXP</div>
+        <div style={buttonStyle} onClick={buyXPHandler}>BuyXP {exp}</div>
     )
 }

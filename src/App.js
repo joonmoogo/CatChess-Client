@@ -27,6 +27,12 @@ function GUI({ children }) {
   const [time, setTime] = useState();
   const [money, setMoney] = useState();
   const [stage, setStage] = useState();
+  const [state,setState] = useState();
+  const [shop, setShop] = useState();
+  const [exp,setExp] = useState();
+  const [hp,setHp] = useState();
+  const [level,setLevel] = useState();
+
 
 
   useEffect(() => {
@@ -55,18 +61,22 @@ function GUI({ children }) {
           break;
         }
         case "shopUpdate": {
+          setShop(msg.data.shop);
           break;
         }
         case "expUpdate": {
+          setExp(msg.data.exp);
           break;
         }
         case "levelUpdate": {
+          setLevel(msg.data.level);
           break;
         }
         case "resGiveItem": {
           break;
         }
         case "stateUpdate": {
+          setState(msg.data.state);
           break;
         }
         case "stageUpdate": {
@@ -83,12 +93,14 @@ function GUI({ children }) {
           break;
         }
         case "moneyUpdate": {
+          setMoney(msg.data.money);
           break;
         }
         case "boardUpdate": {
           break;
         }
         case "hpUpdate": {
+          setHp(msg.data.hp);
           break;
         }
         case "battleUpdate": {
@@ -120,17 +132,23 @@ function GUI({ children }) {
       <div>
         <RightSide
           windowWidth={windowWidth}
-          windowHeight={windowHeight} />
+          windowHeight={windowHeight}
+        />
         <BottomSide
           windowWidth={windowWidth}
-          windowHeight={windowHeight} />
+          windowHeight={windowHeight}
+          shop={shop}
+          level={level}
+          exp={exp}
+          money={money}
+          
+        />
         <TopSide
           windowWidth={windowWidth}
           windowHeight={windowHeight}
           time={time}
           stage={stage}
-          
-          />
+        />
         <LeftSide
           windowWidth={windowWidth}
           windowHeight={windowHeight} />

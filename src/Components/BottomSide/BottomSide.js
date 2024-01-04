@@ -2,8 +2,10 @@ import { useEffect } from "react";
 import BuyXP from "./BuyXP";
 import CharacterCard from "./CharacterCard";
 import Reload from "./Reload";
+import Level from "./Level";
+import Money from "./Money";
 
-export default function BottomSide({windowWidth,windowHeight}) {
+export default function BottomSide({ windowWidth, windowHeight, shop, level, exp, money }) {
 
   const scaleRatio = 1;
   const height = 150;
@@ -44,15 +46,17 @@ export default function BottomSide({windowWidth,windowHeight}) {
   return (
     <div style={bottomSideStyle}>
       <div style={stackBoxStyle}>
-        <BuyXP />
+        <Level level={level}/>
+        <BuyXP exp={exp}/>
         <Reload />
+        <Money money={money}/>
       </div>
       <div style={characterCardContainerStyle}>
-        <CharacterCard onClick={()=>{console.log('asd')}} />
-        <CharacterCard />
-        <CharacterCard />
-        <CharacterCard />
-        
+      {shop&&shop.map((e,i)=>{
+        return(
+          <CharacterCard key={i} shop={shop[i]}/>
+        )
+      })}
       </div>
     </div>
   );
