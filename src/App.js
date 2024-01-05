@@ -33,8 +33,6 @@ function GUI({ children }) {
   const [hp,setHp] = useState();
   const [level,setLevel] = useState();
 
-
-
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
