@@ -9,6 +9,7 @@ import HealthBar from './CustomMeshClass/HealthBar';
 import Arm from './CustomMeshClass/Arm';
 import Pawn from './CustomMeshClass/Pawn';
 import Game from './CustomMeshClass/GameScene';
+import { ENEMY_GROUND_FOR_UNIT, MY_GROUND_FOR_UNIT } from './constant/Constants';
 
 // 
 
@@ -17,9 +18,9 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
     let pawns = [];
     const containerRef = useRef();
-    
+
     useEffect(() => {
-        const gameScene = new Game(windowWidth,windowHeight);
+        const gameScene = new Game(windowWidth, windowHeight);
         containerRef.current.appendChild(gameScene.renderer.domElement);
 
         const map = new Map('/star2.jpg');
@@ -30,44 +31,45 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
         const controls = new Control(gameScene.camera, gameScene.renderer.domElement);
 
-        for (let i = -30; i <= 40; i += 10) {
-            const pawnWhite = new Pawn([i,1,50],0x0fffff)          
-            const arm = new Arm();
-            pawnWhite.mesh.add(arm.mesh);
-            const healthBar = new HealthBar();
-            pawnWhite.mesh.add(healthBar.mesh);
-            gameScene.scene.add(pawnWhite.mesh);
-
-            function updateHealthBarPosition() {
-                healthBar.mesh.position.set(0, 4, 0);
-                healthBar.mesh.quaternion.copy(gameScene.camera.quaternion);
-                requestAnimationFrame(updateHealthBarPosition)
-            }
-            updateHealthBarPosition();
-            pawns.push(pawnWhite);
-        }
-        for (let i = -40; i <= 30; i += 10) {
-
-            const pawnWhite = new Pawn([i,1,-50],0x0fffff)          
-            const arm = new Arm();
-            pawnWhite.mesh.add(arm.mesh);
-            const healthBar = new HealthBar();
-            pawnWhite.mesh.add(healthBar.mesh);
-            gameScene.scene.add(pawnWhite.mesh);
-
-            function updateHealthBarPosition() {
-                healthBar.mesh.position.set(0, 4, 0);
-                healthBar.mesh.quaternion.copy(gameScene.camera.quaternion);
-                requestAnimationFrame(updateHealthBarPosition)
-            }
-            updateHealthBarPosition();
-        }
-
-        const enemyGround = new GroundForUnit([0, -1, -50], 0xffff00);
-        gameScene.scene.add(enemyGround.mesh);
+        
         const myGround = new GroundForUnit([0, -1, 50], 0xffff00);
         gameScene.scene.add(myGround.mesh);
+        const enemyGround = new GroundForUnit([0, -1, -50], 0xffff00);
+        gameScene.scene.add(enemyGround.mesh);
 
+        MY_GROUND_FOR_UNIT.forEach((position) => {
+            const pawnWhite = new Pawn(position, 0x0fffff)
+            const arm = new Arm();
+            pawnWhite.mesh.add(arm.mesh);
+            const healthBar = new HealthBar();
+            pawnWhite.mesh.add(healthBar.mesh);
+            gameScene.scene.add(pawnWhite.mesh);
+
+            function updateHealthBarPosition() {
+                healthBar.mesh.position.set(0, 4, 0);
+                healthBar.mesh.quaternion.copy(gameScene.camera.quaternion);
+                requestAnimationFrame(updateHealthBarPosition)
+            }
+            updateHealthBarPosition();
+            pawns.push(pawnWhite.mesh);
+        })
+
+
+        ENEMY_GROUND_FOR_UNIT.forEach((position)=>{
+            const pawnWhite = new Pawn(position, 0x0fffff)
+            const arm = new Arm();
+            pawnWhite.mesh.add(arm.mesh);
+            const healthBar = new HealthBar();
+            pawnWhite.mesh.add(healthBar.mesh);
+            gameScene.scene.add(pawnWhite.mesh);
+
+            function updateHealthBarPosition() {
+                healthBar.mesh.position.set(0, 4, 0);
+                healthBar.mesh.quaternion.copy(gameScene.camera.quaternion);
+                requestAnimationFrame(updateHealthBarPosition)
+            }
+            updateHealthBarPosition();
+        })
         const cylinders = [];
         const 가로 = 5;
         const 세로 = 6;
@@ -97,18 +99,23 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
                     cylinders.push(cylinder);
                 }
             }
+
         }
+
+
         function animate() {
             requestAnimationFrame(animate);
             controls.control.update();
             gameScene.renderer.render(gameScene.scene, gameScene.camera);
         }
         animate();
-
-        return()=>{
+        const target = new THREE.Vector3(10, 9, 10);
+        gameScene.moveUnit(pawns[0], target);
+        return () => {
             containerRef.current.removeChild(gameScene.renderer.domElement)
         }
     }, []);
 
     return <div ref={containerRef}></div>;
 }
+
