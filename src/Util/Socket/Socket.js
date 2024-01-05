@@ -1,5 +1,3 @@
-import React, { useEffect } from "react";
-
 export class Socket {
     static socket = null;
     static id = localStorage.getItem("id");

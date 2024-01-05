@@ -1,8 +1,5 @@
 import * as THREE from 'three';
 import { useEffect, useRef, useState } from 'react';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-// orbitControls는 카메라 컨트롤
-import { DragControls } from 'three/addons/controls/DragControls.js';
 import Map from './CustomMeshClass/Map';
 import Ground from './CustomMeshClass/Ground';
 import Control from './CustomMeshClass/Control';
@@ -11,6 +8,7 @@ import Cylinder from './CustomMeshClass/Cylinder';
 import HealthBar from './CustomMeshClass/HealthBar';
 import Arm from './CustomMeshClass/Arm';
 import Pawn from './CustomMeshClass/Pawn';
+import Game from './CustomMeshClass/GameScene';
 
 // 
 
@@ -18,48 +16,19 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
 
     let pawns = [];
-    let selectedObject = null;
-    const initialVelocity = new THREE.Vector3(0, 0.6, -0.5);
-    const gravity = new THREE.Vector3(0, -0.01, 0);
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-
     const containerRef = useRef();
-
+    
     useEffect(() => {
-        const scene = new THREE.Scene();
-
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(windowWidth, windowHeight);
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        containerRef.current.appendChild(renderer.domElement);
-
-        // ambientLight는 씬에 있는 모든 객체에 빛을 비춘다.
-        const ambientlight = new THREE.AmbientLight(0xffffff, 0.2);
-        scene.add(ambientlight);
-
-        // ambientLight만 있으면 모든 면이 밝아져 입체적으로 보이지 않는다
-        // directionalLight는 특정 방향에서 객체에 빛을 비춘다.
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-        directionalLight.position.set(100, 100, -100);
-        directionalLight.castShadow = true;
-        scene.add(directionalLight);
-
-        const lightHelper = new THREE.DirectionalLightHelper(directionalLight, 0.11, 0xff0000);
-        scene.add(lightHelper);
+        const gameScene = new Game(windowWidth,windowHeight);
+        containerRef.current.appendChild(gameScene.renderer.domElement);
 
         const map = new Map('/star2.jpg');
-        scene.add(map.mesh);
+        gameScene.scene.add(map.mesh);
 
         const ground = new Ground(0xffffff);
-        scene.add(ground.mesh);
+        gameScene.scene.add(ground.mesh);
 
-        const camera = new THREE.PerspectiveCamera(20, windowWidth / windowHeight, 1, 1000);
-        camera.position.set(0, 2, 20);
-        scene.add(camera);
-
-        const controls = new Control(camera, renderer.domElement);
+        const controls = new Control(gameScene.camera, gameScene.renderer.domElement);
 
         for (let i = -30; i <= 40; i += 10) {
             const pawnWhite = new Pawn([i,1,50],0x0fffff)          
@@ -67,11 +36,11 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             pawnWhite.mesh.add(arm.mesh);
             const healthBar = new HealthBar();
             pawnWhite.mesh.add(healthBar.mesh);
-            scene.add(pawnWhite.mesh);
+            gameScene.scene.add(pawnWhite.mesh);
 
             function updateHealthBarPosition() {
                 healthBar.mesh.position.set(0, 4, 0);
-                healthBar.mesh.quaternion.copy(camera.quaternion);
+                healthBar.mesh.quaternion.copy(gameScene.camera.quaternion);
                 requestAnimationFrame(updateHealthBarPosition)
             }
             updateHealthBarPosition();
@@ -84,21 +53,20 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             pawnWhite.mesh.add(arm.mesh);
             const healthBar = new HealthBar();
             pawnWhite.mesh.add(healthBar.mesh);
-            scene.add(pawnWhite.mesh);
+            gameScene.scene.add(pawnWhite.mesh);
 
             function updateHealthBarPosition() {
                 healthBar.mesh.position.set(0, 4, 0);
-                healthBar.mesh.quaternion.copy(camera.quaternion);
+                healthBar.mesh.quaternion.copy(gameScene.camera.quaternion);
                 requestAnimationFrame(updateHealthBarPosition)
             }
             updateHealthBarPosition();
         }
 
         const enemyGround = new GroundForUnit([0, -1, -50], 0xffff00);
-        scene.add(enemyGround.mesh);
+        gameScene.scene.add(enemyGround.mesh);
         const myGround = new GroundForUnit([0, -1, 50], 0xffff00);
-        scene.add(myGround.mesh);
-
+        gameScene.scene.add(myGround.mesh);
 
         const cylinders = [];
         const 가로 = 5;
@@ -124,190 +92,22 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
                 cylinder.position.set(x - cylinderRadius / 2, y / 2, z);
                 cylinder.castShadow = true;
                 cylinder.occupied = false;
-                scene.add(cylinder);
+                gameScene.scene.add(cylinder);
                 if (i > 세로 / 2) {
                     cylinders.push(cylinder);
                 }
             }
         }
-
-        const onDocumentMouseMove = (event) => {
-            event.preventDefault();
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(scene.children);
-            if (intersects.length > 0) {
-                const FindedObject = intersects[0];
-                const objectName = FindedObject.object.name;
-                if (selectedObject) {
-                    selectedObject.position.copy(FindedObject.point.add(new THREE.Vector3(0, 0, 4)))
-
-                }
-                else {
-
-                }
-                switch (objectName) {
-                    case 'cylinder':
-
-                    case 'unit':
-                }
-            }
-        };
-
-        const onDocumentMouseDown = (event) => {
-            event.preventDefault();
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(scene.children);
-            if (intersects.length > 0) {
-                const FindedObject = intersects[0];
-                const objectname = FindedObject.object.name;
-                console.log(FindedObject);
-                switch (objectname) {
-                    case 'cylinder':
-                        // moveUnit(pawns[0],new THREE THREE.Vector3)
-                        if (selectedObject) {
-                            selectedObject.position.set(
-                                FindedObject.object.position.x,
-                                FindedObject.object.position.y + 4,
-                                FindedObject.object.position.z
-                            );
-                            selectedObject = null;
-                        }
-                        break;
-
-                    case 'unit':
-                        if (!selectedObject) {
-                            selectedObject = FindedObject.object;
-                        }
-                        else {
-                            selectedObject = null;
-                        }
-                        break;
-
-                    case 'groundForUnit':
-                        break;
-
-                }
-            }
-        };
-
-        const onDocumentMouseUp = (event) => {
-            event.preventDefault();
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(scene.children);
-            if (intersects.length > 0) {
-                const FindedObject = intersects[0];
-                const objectname = FindedObject.object.name;
-                if (objectname == 'unit') {
-                    console.log(FindedObject.object);
-                    console.log(pawns[0]);
-                    if (pawns.includes(FindedObject.object)) {
-                        FindedObject.object.material.color.set(0, 0, 1);
-                    }
-                }
-            }
-        };
-
-        renderer.domElement.addEventListener('mousemove', onDocumentMouseMove, false);
-        renderer.domElement.addEventListener('mousedown', onDocumentMouseDown, false);
-
-        // function throwBall(unit, targetPosition) {
-        //     const gravity = new THREE.Vector3(0, -0.008, 0);
-        //     const initialPosition = unit.position;
-        //     const initialVelocity = calculateInitialVelocity(initialPosition, targetPosition);
-        //     const geometry = new THREE.SphereGeometry(0.5, 32, 32);
-        //     const material = new THREE.MeshBasicMaterial({ color: Math.random() * 0xff0000 });
-        //     const ball = new THREE.Mesh(geometry, material);
-        //     scene.add(ball);
-        //     let time = 0;
-        //     function calculateInitialVelocity(start, end) {
-        //         const displacement = end.clone().sub(start);
-        //         const timeToReachTarget = Math.sqrt(2 * displacement.y / Math.abs(gravity.y));
-        //         const initialVelocityY = -gravity.y * timeToReachTarget / 2;
-        //         const initialVelocity = displacement.clone().divideScalar(timeToReachTarget);
-        //         initialVelocity.y = initialVelocityY;
-        //         return initialVelocity;
-        //     }
-        //     function updatePosition() {
-        //         const displacement = new THREE.Vector3();
-        //         displacement.copy(initialVelocity)
-        //             .multiplyScalar(time)
-        //             .add(gravity.clone().multiplyScalar(0.5 * time * time));
-        //         ball.position.copy(initialPosition).add(displacement);
-        //         time += 1;
-        //         if (ball.position.y <= 2) {
-        //             time = 0;
-        //         }
-        //         requestAnimationFrame(updatePosition);
-        //     }
-        //     updatePosition();
-        // }
-
-        // function moveUnit(unit, targetPosition) {
-        //     const gravity = new THREE.Vector3(0, -0.008, 0);
-        //     const jumpHeight = 20; // Adjust this value to control the jump height
-        //     const initialPosition = unit.position.clone();
-        //     const initialVelocity = calculateInitialVelocity(initialPosition, targetPosition);
-
-        //     let time = 0;
-        //     let isJumping = true;
-
-        //     function calculateInitialVelocity(start, end) {
-        //         const displacement = end.clone().sub(start);
-        //         const timeToReachTarget = Math.sqrt(2 * jumpHeight / Math.abs(gravity.y));
-        //         const initialVelocityY = -gravity.y * timeToReachTarget / 2;
-        //         const initialVelocity = displacement.clone().divideScalar(timeToReachTarget);
-        //         initialVelocity.y = initialVelocityY;
-        //         return initialVelocity;
-        //     }
-
-        //     function updatePosition() {
-        //         const displacement = new THREE.Vector3();
-        //         displacement.copy(initialVelocity)
-        //             .multiplyScalar(time)
-        //             .add(gravity.clone().multiplyScalar(0.5 * time * time));
-
-        //         unit.position.copy(initialPosition).add(displacement);
-        //         time += 1;
-
-        //         if (isJumping && unit.position.y <= jumpHeight) {
-        //             isJumping = false;
-        //             time = 0;
-        //         }
-        //         if (!isJumping && unit.position.y <= 4.99) {
-        //             time = 0;
-        //         }
-        //         if (isJumping || unit.position.y > 4.99) {
-        //             requestAnimationFrame(updatePosition);
-        //         }
-        //     }
-
-        //     updatePosition();
-        // }
-
-
-
-
         function animate() {
             requestAnimationFrame(animate);
             controls.control.update();
-            renderer.render(scene, camera);
+            gameScene.renderer.render(gameScene.scene, gameScene.camera);
         }
         animate();
 
-        camera.position.z = 100;
-        camera.position.y = 105;
-
-        return () => {
-            containerRef.current.removeChild(renderer.domElement);
-            renderer.domElement.removeEventListener('mousemove', onDocumentMouseMove, false);
-            renderer.domElement.removeEventListener('mousedown', onDocumentMouseDown, false);
-        };
+        return()=>{
+            containerRef.current.removeChild(gameScene.renderer.domElement)
+        }
     }, []);
 
     return <div ref={containerRef}></div>;

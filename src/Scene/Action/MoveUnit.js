@@ -1,4 +1,4 @@
-function moveUnit(unit, targetPosition) {
+export default function moveUnit(unit, targetPosition) {
     const gravity = new THREE.Vector3(0, -0.008, 0);
     const jumpHeight = 20; // Adjust this value to control the jump height
     const initialPosition = unit.position.clone();

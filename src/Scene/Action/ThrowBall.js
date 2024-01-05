@@ -1,4 +1,4 @@
-function throwBall(unit, targetPosition,scene) {
+export default function throwBall(unit, targetPosition, scene) {
     const gravity = new THREE.Vector3(0, -0.008, 0);
     const initialPosition = unit.position;
     const initialVelocity = calculateInitialVelocity(initialPosition, targetPosition);
