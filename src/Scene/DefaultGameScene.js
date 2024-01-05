@@ -11,7 +11,12 @@ import Arm from './CustomMeshClass/Arm';
 import Pawn from './CustomMeshClass/Pawn';
 import Game from './CustomMeshClass/GameScene';
 
-import { ENEMY_GROUND_FOR_ARRANGE,ENEMY_GROUND_FOR_BATTLE,MY_GROUND_FOR_ARRANGE, MY_GROUND_FOR_BATTLE } from './constant/Constants';
+import { ENEMY_GROUND_FOR_ARRANGE, ENEMY_GROUND_FOR_BATTLE, MY_GROUND_FOR_ARRANGE, MY_GROUND_FOR_BATTLE } from './constant/Constants';
+
+const 노란색 = 0xffff00
+const 초록색 = 0xfff00
+const 빨간색 = 0xff0000
+const 파란색 = 0x0fffff
 
 export default function DefaultGameScene({ windowWidth, windowHeight }) {
     let pawns = [];
@@ -29,32 +34,32 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
         const controls = new Control(gameScene.camera, gameScene.renderer.domElement);
 
-        const myGround = new GroundForUnit([0, -1, 50], 0xffff00);
+        const myGround = new GroundForUnit([0, -1, 50], 노란색);
         gameScene.scene.add(myGround.mesh);
-        const enemyGround = new GroundForUnit([0, -1, -50], 0xffff00);
+        const enemyGround = new GroundForUnit([0, -1, -50], 노란색);
         gameScene.scene.add(enemyGround.mesh);
 
         MY_GROUND_FOR_ARRANGE.forEach((position) => {
-            const pawnWhite = new Pawn(position, 0x0fffff, gameScene.camera.quaternion)
+            const pawnWhite = new Pawn(position, 파란색, gameScene.camera.quaternion)
             gameScene.scene.add(pawnWhite.mesh);
             pawns.push(pawnWhite.mesh);
         })
 
-        ENEMY_GROUND_FOR_ARRANGE.forEach((position)=>{
-            const pawnWhite = new Pawn(position, 0x0fffff, gameScene.camera.quaternion)
+        ENEMY_GROUND_FOR_ARRANGE.forEach((position) => {
+            const pawnWhite = new Pawn(position, 파란색, gameScene.camera.quaternion)
             gameScene.scene.add(pawnWhite.mesh);
         })
 
-        MY_GROUND_FOR_BATTLE.forEach((array)=>{
-            array.forEach((position)=>{
-                const cylinder = new Cylinder(position, 0xfff00);
+        MY_GROUND_FOR_BATTLE.forEach((array) => {
+            array.forEach((position) => {
+                const cylinder = new Cylinder(position, 초록색);
                 gameScene.scene.add(cylinder.mesh);
             })
         })
 
-        ENEMY_GROUND_FOR_BATTLE.forEach((array)=>{
-            array.forEach((position)=>{
-                const cylinder = new Cylinder(position,0xff0000);
+        ENEMY_GROUND_FOR_BATTLE.forEach((array) => {
+            array.forEach((position) => {
+                const cylinder = new Cylinder(position, 빨간색);
                 gameScene.scene.add(cylinder.mesh);
             })
         })
