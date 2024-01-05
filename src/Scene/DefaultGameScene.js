@@ -9,7 +9,7 @@ import HealthBar from './CustomMeshClass/HealthBar';
 import Arm from './CustomMeshClass/Arm';
 import Pawn from './CustomMeshClass/Pawn';
 import Game from './CustomMeshClass/GameScene';
-import { ENEMY_GROUND_FOR_UNIT, MY_GROUND_FOR_UNIT } from './constant/Constants';
+import { ENEMY_GROUND_FOR_ARRANGE,ENEMY_GROUND_FOR_BATTLE,MY_GROUND_FOR_ARRANGE } from './constant/Constants';
 
 // 
 
@@ -31,13 +31,12 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
 
         const controls = new Control(gameScene.camera, gameScene.renderer.domElement);
 
-        
         const myGround = new GroundForUnit([0, -1, 50], 0xffff00);
         gameScene.scene.add(myGround.mesh);
         const enemyGround = new GroundForUnit([0, -1, -50], 0xffff00);
         gameScene.scene.add(enemyGround.mesh);
 
-        MY_GROUND_FOR_UNIT.forEach((position) => {
+        MY_GROUND_FOR_ARRANGE.forEach((position) => {
             const pawnWhite = new Pawn(position, 0x0fffff)
             const arm = new Arm();
             pawnWhite.mesh.add(arm.mesh);
@@ -55,7 +54,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
         })
 
 
-        ENEMY_GROUND_FOR_UNIT.forEach((position)=>{
+        ENEMY_GROUND_FOR_ARRANGE.forEach((position)=>{
             const pawnWhite = new Pawn(position, 0x0fffff)
             const arm = new Arm();
             pawnWhite.mesh.add(arm.mesh);
@@ -94,6 +93,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
                 cylinder.position.set(x - cylinderRadius / 2, y / 2, z);
                 cylinder.castShadow = true;
                 cylinder.occupied = false;
+                console.log(cylinder.position);
                 gameScene.scene.add(cylinder);
                 if (i > 세로 / 2) {
                     cylinders.push(cylinder);
@@ -101,16 +101,12 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             }
 
         }
-
-
         function animate() {
             requestAnimationFrame(animate);
             controls.control.update();
             gameScene.renderer.render(gameScene.scene, gameScene.camera);
         }
         animate();
-        const target = new THREE.Vector3(10, 9, 10);
-        gameScene.moveUnit(pawns[0], target);
         return () => {
             containerRef.current.removeChild(gameScene.renderer.domElement)
         }

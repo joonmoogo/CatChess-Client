@@ -3,7 +3,6 @@ import { useEffect } from "react";
 export default function Level({level}) {
 
     useEffect(()=>{
-        console.log(level);
     })
     const buttonStyle={
         color:'white',
