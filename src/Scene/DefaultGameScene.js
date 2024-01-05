@@ -16,10 +16,15 @@ import {
     MY_GROUND_FOR_BATTLE
 } from './constant/Constants';
 
-const 노란색 = 0xffff00
-const 초록색 = 0xfff00
-const 빨간색 = 0xff0000
-const 파란색 = 0x0fffff
+import {
+    노란색,
+    초록색,
+    빨간색,
+    파란색
+} from './constant/Color';
+
+
+
 
 export default function DefaultGameScene({ windowWidth, windowHeight }) {
     let pawns = [];
