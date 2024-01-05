@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { useEffect, useRef, useState } from 'react';
+
 import Map from './CustomMeshClass/Map';
 import Ground from './CustomMeshClass/Ground';
 import Control from './CustomMeshClass/Control';
@@ -9,13 +10,10 @@ import HealthBar from './CustomMeshClass/HealthBar';
 import Arm from './CustomMeshClass/Arm';
 import Pawn from './CustomMeshClass/Pawn';
 import Game from './CustomMeshClass/GameScene';
-import { ENEMY_GROUND_FOR_ARRANGE,ENEMY_GROUND_FOR_BATTLE,MY_GROUND_FOR_ARRANGE } from './constant/Constants';
 
-// 
+import { ENEMY_GROUND_FOR_ARRANGE,ENEMY_GROUND_FOR_BATTLE,MY_GROUND_FOR_ARRANGE, MY_GROUND_FOR_BATTLE } from './constant/Constants';
 
 export default function DefaultGameScene({ windowWidth, windowHeight }) {
-
-
     let pawns = [];
     const containerRef = useRef();
 
@@ -37,70 +35,30 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
         gameScene.scene.add(enemyGround.mesh);
 
         MY_GROUND_FOR_ARRANGE.forEach((position) => {
-            const pawnWhite = new Pawn(position, 0x0fffff)
-            const arm = new Arm();
-            pawnWhite.mesh.add(arm.mesh);
-            const healthBar = new HealthBar();
-            pawnWhite.mesh.add(healthBar.mesh);
+            const pawnWhite = new Pawn(position, 0x0fffff, gameScene.camera.quaternion)
             gameScene.scene.add(pawnWhite.mesh);
-
-            function updateHealthBarPosition() {
-                healthBar.mesh.position.set(0, 4, 0);
-                healthBar.mesh.quaternion.copy(gameScene.camera.quaternion);
-                requestAnimationFrame(updateHealthBarPosition)
-            }
-            updateHealthBarPosition();
             pawns.push(pawnWhite.mesh);
         })
 
-
         ENEMY_GROUND_FOR_ARRANGE.forEach((position)=>{
-            const pawnWhite = new Pawn(position, 0x0fffff)
-            const arm = new Arm();
-            pawnWhite.mesh.add(arm.mesh);
-            const healthBar = new HealthBar();
-            pawnWhite.mesh.add(healthBar.mesh);
+            const pawnWhite = new Pawn(position, 0x0fffff, gameScene.camera.quaternion)
             gameScene.scene.add(pawnWhite.mesh);
-
-            function updateHealthBarPosition() {
-                healthBar.mesh.position.set(0, 4, 0);
-                healthBar.mesh.quaternion.copy(gameScene.camera.quaternion);
-                requestAnimationFrame(updateHealthBarPosition)
-            }
-            updateHealthBarPosition();
         })
-        const cylinders = [];
-        const 가로 = 5;
-        const 세로 = 6;
-        const cylinderRadius = 7; // 기본 반지름
-        const cylinderHeight = 4; // 기본 높이
 
-        for (let i = 1; i <= 세로; i++) {
-            for (let j = 1; j <= 가로; j++) {
-                // Cylinder 생성
-                const geometry = new THREE.CylinderGeometry(cylinderRadius, cylinderRadius, cylinderHeight, 6);
-                const material = new THREE.MeshStandardMaterial({ color: i > 세로 / 2 ? 0xfff00 : 0xff0000 });
-                const cylinder = new THREE.Mesh(geometry, material);
-                cylinder.receiveShadow = true;
-                // 정 가운데 위치 계산
-                let x = cylinderRadius * 2 * (j - (가로 + 1) / 2);
-                let y = cylinderHeight / 2;
-                let z = cylinderRadius * 2 * (i - (세로 + 1) / 2);
-                if (i % 2 != 0) {
-                    x += cylinderRadius;
-                }
-                cylinder.name = 'cylinder';
-                cylinder.position.set(x - cylinderRadius / 2, y / 2, z);
-                cylinder.castShadow = true;
-                cylinder.occupied = false;
-                console.log(cylinder.position);
-                gameScene.scene.add(cylinder);
-                if (i > 세로 / 2) {
-                    cylinders.push(cylinder);
-                }
-            }
+        MY_GROUND_FOR_BATTLE.forEach((array)=>{
+            array.forEach((position)=>{
+                const cylinder = new Cylinder(position, 0xfff00);
+                gameScene.scene.add(cylinder.mesh);
+            })
+        })
 
-        }
+        ENEMY_GROUND_FOR_BATTLE.forEach((array)=>{
+            array.forEach((position)=>{
+                const cylinder = new Cylinder(position,0xff0000);
+                gameScene.scene.add(cylinder.mesh);
+            })
+        })
+
         function animate() {
             requestAnimationFrame(animate);
             controls.control.update();

@@ -13,5 +13,6 @@ export default class Cylinder {
         this.mesh.name = 'cylinder';
         this.mesh.castShadow = true;
         this.mesh.occupied = false;
+        this.mesh.position.set(...position);
     }
 }
