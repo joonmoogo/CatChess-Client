@@ -7,14 +7,14 @@ import Control from './CustomMeshClass/Control';
 import GroundForUnit from './CustomMeshClass/GroundForUnit';
 import Cylinder from './CustomMeshClass/Cylinder';
 import Pawn from './CustomMeshClass/Pawn';
-import Game from './CustomMeshClass/GameScene';
+import GameScene from './CustomMeshClass/GameScene';
 
 import {
     ENEMY_GROUND_FOR_ARRANGE,
     ENEMY_GROUND_FOR_BATTLE,
     MY_GROUND_FOR_ARRANGE,
     MY_GROUND_FOR_BATTLE
-} from './constant/Constants';
+} from './constant/Coordinates';
 
 import {
     노란색,
@@ -31,7 +31,7 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
     const containerRef = useRef();
 
     useEffect(() => {
-        const gameScene = new Game(windowWidth, windowHeight);
+        const gameScene = new GameScene(windowWidth, windowHeight);
         containerRef.current.appendChild(gameScene.renderer.domElement);
 
         const map = new Map('/star2.jpg');

@@ -3,6 +3,7 @@ import Arm from './Arm';
 import HealthBar from './HealthBar';
 
 export default class Pawn {
+
     constructor(position, color, quaternion) {
         this.mesh = new THREE.Mesh(
             new THREE.BoxGeometry(2, 4, 2),

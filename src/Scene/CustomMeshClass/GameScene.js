@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import { BATTLE_GROUND } from '../constant/Constants';
+import { BATTLE_GROUND } from '../constant/Coordinates';
 
-export default class Game {
+export default class GameScene {
 
     selectedObject = null;
 
@@ -85,7 +85,7 @@ export default class Game {
             const FindedObject = intersects[0];
             const objectName = FindedObject.object.name;
             if (this.selectedObject) {
-                this.selectedObject.position.copy(FindedObject.point.add(new THREE.Vector3(0, 0, 4)))
+                this.selectedObject.position.copy(FindedObject.point.add(new THREE.Vector3(0, 0, 8)))
             }
             else {
             }
