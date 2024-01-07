@@ -13,8 +13,8 @@ export default function BottomSide({ windowWidth, windowHeight, shop, level, exp
   const bottomSideStyle = {
     position: "fixed",
     bottom: 0,
-    left: "50%",
-    width: `${windowWidth / 2}px`,
+    left: "45%",
+    width: `${windowWidth / 1.9}px`,
     height: `${height}px`,
     marginLeft: `-${windowWidth / 4}px`,
     padding: "10px",
@@ -47,16 +47,16 @@ export default function BottomSide({ windowWidth, windowHeight, shop, level, exp
     <div style={bottomSideStyle}>
       <div style={stackBoxStyle}>
         <Level level={level}/>
-        <BuyXP exp={exp}/>
+        <BuyXP exp={exp} />
         <Reload />
-        <Money money={money}/>
+        {/* <Money money={money}/> */}
       </div>
       <div style={characterCardContainerStyle}>
-      {shop&&shop.map((e,i)=>{
-        return(
-          <CharacterCard key={i} shop={shop[i]}/>
-        )
-      })}
+        {shop && shop.map((e, i) => {
+          return (
+            <CharacterCard key={i} shop={shop[i]} />
+          )
+        })}
       </div>
     </div>
   );

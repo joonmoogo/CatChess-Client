@@ -23,9 +23,6 @@ import {
     파란색
 } from './constant/Color';
 
-
-
-
 export default function DefaultGameScene({ windowWidth, windowHeight }) {
     let pawns = [];
     const containerRef = useRef();

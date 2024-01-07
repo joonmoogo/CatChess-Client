@@ -21,17 +21,24 @@ function App() {
 }
 
 function GUI({ children }) {
+
+  /**
+   window data state
+   */
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
 
+  /**
+   Socket data state 
+   */
   const [time, setTime] = useState();
   const [money, setMoney] = useState();
   const [stage, setStage] = useState();
-  const [state,setState] = useState();
+  const [state, setState] = useState();
   const [shop, setShop] = useState();
-  const [exp,setExp] = useState();
-  const [hp,setHp] = useState();
-  const [level,setLevel] = useState();
+  const [exp, setExp] = useState();
+  const [hp, setHp] = useState();
+  const [level, setLevel] = useState();
 
   useEffect(() => {
     const handleResize = () => {
@@ -139,7 +146,7 @@ function GUI({ children }) {
           level={level}
           exp={exp}
           money={money}
-          
+
         />
         <TopSide
           windowWidth={windowWidth}
@@ -149,7 +156,8 @@ function GUI({ children }) {
         />
         <LeftSide
           windowWidth={windowWidth}
-          windowHeight={windowHeight} />
+          windowHeight={windowHeight} 
+          />
       </div>
       {React.cloneElement(children, { windowWidth, windowHeight })}
     </>
