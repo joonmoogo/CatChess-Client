@@ -9,6 +9,6 @@ export default function Money({money}) {
         console.log('Reload button was clicked');
     }
     return (
-        <div style={buttonStyle} onClick={reloadHandler}>Money={money}</div>
+        <div style={buttonStyle} onClick={reloadHandler}>💽 50</div>
     )
 }

@@ -13,7 +13,7 @@ export default function BottomSide({ windowWidth, windowHeight, shop, level, exp
   const bottomSideStyle = {
     position: "fixed",
     bottom: 0,
-    left: "45%",
+    left: "48%",
     width: `${windowWidth / 1.9}px`,
     height: `${height}px`,
     marginLeft: `-${windowWidth / 4}px`,
@@ -43,7 +43,18 @@ export default function BottomSide({ windowWidth, windowHeight, shop, level, exp
     marginLeft: "10px", // 수정된 부분
   };
 
+  const moneyBoxStyle={
+    position: "fixed",
+    bottom: 160,
+    left: "48%",
+    padding: "10px",
+  }
+
   return (
+    <>
+    <div style={moneyBoxStyle}>
+        <Money/>
+    </div>
     <div style={bottomSideStyle}>
       <div style={stackBoxStyle}>
         <Level level={level}/>
@@ -59,5 +70,6 @@ export default function BottomSide({ windowWidth, windowHeight, shop, level, exp
         })}
       </div>
     </div>
+    </>
   );
 }
