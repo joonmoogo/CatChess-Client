@@ -1,4 +1,7 @@
+import { useEffect, useState } from "react";
+
 export default function Money({ money }) {
+
     const buttonStyle = {
         color: 'white',
         borderBottom: '23px solid white',
@@ -22,7 +25,7 @@ export default function Money({ money }) {
     return (
         <>
             <div style={buttonStyle} onClick={reloadHandler}>
-            <div style={textStyle}>💰{money}100</div>
+            <div style={textStyle}>💰{money}</div>
             </div>
         </>
     )

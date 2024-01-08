@@ -1,7 +1,7 @@
 export default function Profile() {
     const profileStyle = {
         border: '1px solid white',
-        color:'white',
+        color: 'white',
         borderRadius: '100px',
         width: '50px',
         height: '50px',
@@ -10,15 +10,10 @@ export default function Profile() {
     }
     return (
         <>
-            {[1, 2, 3, 4, 5].map((e,i) => {
-                return (
-                    <div key={i} style={profileStyle}>
-                        <div id="image">profile</div>
-                        <div id="blood">{Math.round(Math.random() * 100 + 1)}</div>
-                    </div>
-                )
-            })}
-
+            <div style={profileStyle}>
+                <div id="image">asd</div>
+                <div id="blood">{}100</div>
+            </div>
         </>
     )
 }

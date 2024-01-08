@@ -11,7 +11,7 @@ export default function Reload() {
 
     function reloadHandler(event){
         console.log('Reload button was clicked');
-        // Socket.sendMsg('');
+        Socket.sendMsg("reqReload", "");
     }
     return (
         <div style={buttonStyle} onClick={reloadHandler}>Reload</div>

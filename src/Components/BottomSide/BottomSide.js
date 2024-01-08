@@ -5,6 +5,7 @@ import Reload from "./Reload";
 import Level from "./Level";
 import Money from "./Money";
 import Winning from "./Winning";
+import { Socket } from "../../Util/Socket/Socket";
 
 export default function BottomSide({ windowWidth, windowHeight, shop, level, exp, money }) {
 
@@ -61,22 +62,27 @@ export default function BottomSide({ windowWidth, windowHeight, shop, level, exp
   return (
     <>
     <div style={moneyBoxStyle}>
-        <Money/>
+        <Money money={money}/>
     </div>
     <div style={winningBoxStyle}>
         <Winning/>
     </div>
     <div style={bottomSideStyle}>
       <div style={stackBoxStyle}>
-        <Level level={level}/>
-        <BuyXP exp={exp} />
+        <Level level={level} exp={exp}/>
+        <BuyXP />
         <Reload />
         {/* <Money money={money}/> */}
       </div>
       <div style={characterCardContainerStyle}>
         {shop && shop.map((e, i) => {
           return (
-            <CharacterCard key={i} shop={shop[i]} />
+            <CharacterCard onClick={()=>{
+              console.log('character clicked');
+              Socket.sendMsg("reqBuyCat", {
+                index: i,
+            });
+            }} key={i} shop={shop[i]} />
           )
         })}
       </div>

@@ -39,6 +39,7 @@ function GUI({ children }) {
   const [exp, setExp] = useState();
   const [hp, setHp] = useState();
   const [level, setLevel] = useState();
+  const [board, setBoard] = useState();
 
   useEffect(() => {
     const handleResize = () => {
@@ -102,6 +103,7 @@ function GUI({ children }) {
           break;
         }
         case "boardUpdate": {
+          setBoard(msg.data);
           break;
         }
         case "hpUpdate": {
@@ -146,7 +148,6 @@ function GUI({ children }) {
           level={level}
           exp={exp}
           money={money}
-
         />
         <TopSide
           windowWidth={windowWidth}
@@ -156,10 +157,14 @@ function GUI({ children }) {
         />
         <LeftSide
           windowWidth={windowWidth}
-          windowHeight={windowHeight} 
-          />
+          windowHeight={windowHeight}
+        />
       </div>
-      {React.cloneElement(children, { windowWidth, windowHeight })}
+      {React.cloneElement(children, {
+        windowWidth,
+        windowHeight,
+        board,
+      })}
     </>
   );
 }

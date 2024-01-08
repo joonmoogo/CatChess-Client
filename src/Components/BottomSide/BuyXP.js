@@ -1,6 +1,6 @@
 import { Socket } from "../../Util/Socket/Socket";
 
-export default function BuyXP({exp}) {
+export default function BuyXP() {
 
     const buttonStyle={
         color:'white',
@@ -11,11 +11,11 @@ export default function BuyXP({exp}) {
     }
     function buyXPHandler(event){
         console.log('buyXP button was clicked');
-        // Socket.sendMsg('')
+        Socket.sendMsg("reqBuyExp", "");
         
     }
 
     return (
-        <div style={buttonStyle} onClick={buyXPHandler}>BuyXP {exp}</div>
+        <div style={buttonStyle} onClick={buyXPHandler}>BuyXP</div>
     )
 }

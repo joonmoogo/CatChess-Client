@@ -1,7 +1,7 @@
 import Profile from "./Profile"
 export default function RightSide({ windowWidth, windowHeight }) {
     const scaleRatio = 1;
-    const width = 100;
+    const width = 50;
 
     const rightSideStyle = {
         position: "fixed",

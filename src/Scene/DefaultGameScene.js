@@ -27,14 +27,14 @@ import {
 import GroundForItem from './CustomMeshClass/GroundForItem';
 import Item from './CustomMeshClass/Item';
 
-export default function DefaultGameScene({ windowWidth, windowHeight }) {
-    let pawns = [];
+export default function DefaultGameScene({ windowWidth, windowHeight, board }) {
     const containerRef = useRef();
+    const gameSceneRef = useRef();
 
     useEffect(() => {
         const gameScene = new GameScene(windowWidth, windowHeight);
+        gameSceneRef.current = gameScene
         containerRef.current.appendChild(gameScene.renderer.domElement);
-
         const map = new Map('/star2.jpg');
         gameScene.scene.add(map.mesh);
 
@@ -48,12 +48,6 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
         const enemyGround = new GroundForUnit([0, -1, -50], 노란색);
         gameScene.scene.add(enemyGround.mesh);
 
-        MY_GROUND_FOR_ARRANGE.forEach((position) => {
-            const pawnWhite = new Pawn(position, 파란색, gameScene.camera.quaternion)
-            gameScene.scene.add(pawnWhite.mesh);
-            pawns.push(pawnWhite.mesh);
-        })
-
         ENEMY_GROUND_FOR_ARRANGE.forEach((position) => {
             const pawnWhite = new Pawn(position, 파란색, gameScene.camera.quaternion)
             gameScene.scene.add(pawnWhite.mesh);
@@ -65,11 +59,6 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
                 gameScene.scene.add(cylinder.mesh);
             })
         })
-        
-        const myItemGround = new GroundForItem([-40,-0.9,50],초록색);
-        gameScene.scene.add(myItemGround.mesh);
-        const enemyItemGround = new GroundForItem([40,-0.9,-50],빨간색);
-        gameScene.scene.add(enemyItemGround.mesh);
 
         ENEMY_GROUND_FOR_BATTLE.forEach((array) => {
             array.forEach((position) => {
@@ -78,13 +67,19 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             })
         })
 
-        MY_GROUND_FOR_ITEM.forEach((position)=>{
-            const item = new Item(position,빨간색);
+        const myItemGround = new GroundForItem([-40, -0.9, 50], 초록색);
+        gameScene.scene.add(myItemGround.mesh);
+        const enemyItemGround = new GroundForItem([40, -0.9, -50], 빨간색);
+        gameScene.scene.add(enemyItemGround.mesh);
+
+
+        MY_GROUND_FOR_ITEM.forEach((position) => {
+            const item = new Item(position, 빨간색);
             gameScene.scene.add(item.mesh);
         })
 
-        ENEMY_GROUND_FOR_ITEM.forEach((position)=>{
-            const item = new Item(position,초록색);
+        ENEMY_GROUND_FOR_ITEM.forEach((position) => {
+            const item = new Item(position, 초록색);
             gameScene.scene.add(item.mesh);
         })
         function animate() {
@@ -97,6 +92,16 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             containerRef.current.removeChild(gameScene.renderer.domElement)
         }
     }, []);
+
+    useEffect(() => {
+        MY_GROUND_FOR_ARRANGE.forEach((position, index) => {
+            console.log(board?.queue[index]);
+            if (board?.queue[index] != 'null' && board?.queue[index] != undefined) {
+                const pawnWhite = new Pawn(position, 파란색, gameSceneRef.current.camera.quaternion)
+                gameSceneRef.current.scene.add(pawnWhite.mesh);
+            }
+        })
+    }, [board])
 
     return <div ref={containerRef}></div>;
 }

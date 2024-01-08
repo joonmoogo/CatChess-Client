@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-export default function Level({ level }) {
-  const [progressValue, setProgressValue] = useState(10);
+export default function Level({ level,exp }) {
+    
   const [maxValue,setMaxValue] = useState(20);
 
   const buttonStyle = {
@@ -26,8 +26,8 @@ export default function Level({ level }) {
       <div style={{color:'white'}}>
         Level{level}
       </div>
-      <progress value={progressValue} max={maxValue} style={progressBarStyle} /> 
-      <span style={valueTextStyle}>{progressValue}/{maxValue}</span>
+      <progress value={exp} max={maxValue} style={progressBarStyle} /> 
+      <span style={valueTextStyle}>{exp}/{maxValue}</span>
     </div>
   );
 }

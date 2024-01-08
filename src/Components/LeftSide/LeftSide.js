@@ -3,7 +3,7 @@ import Combination from "./Combination";
 export default function LeftSide({ windowWidth, windowHeight }) {
   const scaleRatio = 1;
   const widthRatio = 0.1;
-  const width = 100;
+  const width = 50;
 
   const leftSideStyle = {
     position: "fixed",
