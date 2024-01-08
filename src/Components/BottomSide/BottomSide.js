@@ -4,6 +4,7 @@ import CharacterCard from "./CharacterCard";
 import Reload from "./Reload";
 import Level from "./Level";
 import Money from "./Money";
+import Winning from "./Winning";
 
 export default function BottomSide({ windowWidth, windowHeight, shop, level, exp, money }) {
 
@@ -50,10 +51,20 @@ export default function BottomSide({ windowWidth, windowHeight, shop, level, exp
     padding: "10px",
   }
 
+  const winningBoxStyle={
+    position: "fixed",
+    bottom: 160,
+    left: "53%",
+    padding: "10px",
+  }
+
   return (
     <>
     <div style={moneyBoxStyle}>
         <Money/>
+    </div>
+    <div style={winningBoxStyle}>
+        <Winning/>
     </div>
     <div style={bottomSideStyle}>
       <div style={stackBoxStyle}>

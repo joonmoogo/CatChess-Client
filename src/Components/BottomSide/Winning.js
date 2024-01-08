@@ -1,18 +1,21 @@
-export default function Money({ money }) {
+
+
+export default function Winning(){
     const buttonStyle = {
         color: 'white',
-        borderBottom: '25px solid white',
-        borderLeft: '10px solid transparent',
-        borderRight: '10px solid transparent',
+        border: '4px solid white',
         height: '0%',
         width:'50px',
-        
+        borderRadius:'100px',
+        textAlign:'center',
+        background:'white',
     }
 
     const textStyle = {
-        textAlign:'center',
-        position:'absolute',
-        color:'black'
+        // textAlign:'center',
+        // position:'absolute',
+        color:'black',
+        marginBottom:'1px'
     }
 
     function reloadHandler(event) {
@@ -22,7 +25,7 @@ export default function Money({ money }) {
     return (
         <>
             <div style={buttonStyle} onClick={reloadHandler}>
-            <div style={textStyle}>💰{money}100</div>
+            <div style={textStyle}>🔥6</div>
             </div>
         </>
     )
