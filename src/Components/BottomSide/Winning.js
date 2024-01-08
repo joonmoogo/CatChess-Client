@@ -3,12 +3,13 @@
 export default function Winning(){
     const buttonStyle = {
         color: 'white',
-        border: '4px solid white',
+        border: '1px solid white',
         height: '0%',
         width:'50px',
-        borderRadius:'100px',
+        borderRadius:'10px',
         textAlign:'center',
         background:'white',
+        userSelect:'none',
     }
 
     const textStyle = {

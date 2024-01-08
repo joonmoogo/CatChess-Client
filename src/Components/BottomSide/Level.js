@@ -7,6 +7,7 @@ export default function Level({ level }) {
   const buttonStyle = {
     color: "white",
     border: "1px solid white",
+    userSelect:'none',
     // height: "50%",
   };
 

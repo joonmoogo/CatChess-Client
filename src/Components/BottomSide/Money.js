@@ -1,12 +1,12 @@
 export default function Money({ money }) {
     const buttonStyle = {
         color: 'white',
-        borderBottom: '25px solid white',
+        borderBottom: '23px solid white',
         borderLeft: '10px solid transparent',
         borderRight: '10px solid transparent',
         height: '0%',
         width:'50px',
-        
+        userSelect:'none',
     }
 
     const textStyle = {
