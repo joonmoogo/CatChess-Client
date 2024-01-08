@@ -12,8 +12,10 @@ import GameScene from './CustomMeshClass/GameScene';
 import {
     ENEMY_GROUND_FOR_ARRANGE,
     ENEMY_GROUND_FOR_BATTLE,
+    ENEMY_GROUND_FOR_ITEM,
     MY_GROUND_FOR_ARRANGE,
-    MY_GROUND_FOR_BATTLE
+    MY_GROUND_FOR_BATTLE,
+    MY_GROUND_FOR_ITEM,
 } from './constant/Coordinates';
 
 import {
@@ -22,6 +24,8 @@ import {
     빨간색,
     파란색
 } from './constant/Color';
+import GroundForItem from './CustomMeshClass/GroundForItem';
+import Item from './CustomMeshClass/Item';
 
 export default function DefaultGameScene({ windowWidth, windowHeight }) {
     let pawns = [];
@@ -61,6 +65,11 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
                 gameScene.scene.add(cylinder.mesh);
             })
         })
+        
+        const myItemGround = new GroundForItem([-40,-0.9,50],초록색);
+        gameScene.scene.add(myItemGround.mesh);
+        const enemyItemGround = new GroundForItem([40,-0.9,-50],빨간색);
+        gameScene.scene.add(enemyItemGround.mesh);
 
         ENEMY_GROUND_FOR_BATTLE.forEach((array) => {
             array.forEach((position) => {
@@ -69,6 +78,15 @@ export default function DefaultGameScene({ windowWidth, windowHeight }) {
             })
         })
 
+        MY_GROUND_FOR_ITEM.forEach((position)=>{
+            const item = new Item(position,빨간색);
+            gameScene.scene.add(item.mesh);
+        })
+
+        ENEMY_GROUND_FOR_ITEM.forEach((position)=>{
+            const item = new Item(position,초록색);
+            gameScene.scene.add(item.mesh);
+        })
         function animate() {
             requestAnimationFrame(animate);
             controls.control.update();

@@ -9,5 +9,6 @@ export default class Ground {
         this.mesh.name = 'ground';
         this.mesh.rotation.x = Math.PI * -0.5;
         this.mesh.position.set(0,-6.1,0);
+        
     }
 }

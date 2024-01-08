@@ -1,3 +1,5 @@
+import { Socket } from "../../Util/Socket/Socket";
+
 export default function BuyXP({exp}) {
 
     const buttonStyle={
@@ -9,6 +11,8 @@ export default function BuyXP({exp}) {
     }
     function buyXPHandler(event){
         console.log('buyXP button was clicked');
+        // Socket.sendMsg('')
+        
     }
 
     return (

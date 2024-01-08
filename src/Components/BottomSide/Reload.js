@@ -1,3 +1,5 @@
+import { Socket } from "../../Util/Socket/Socket";
+
 export default function Reload() {
     const buttonStyle={
         color:'white',
@@ -9,6 +11,7 @@ export default function Reload() {
 
     function reloadHandler(event){
         console.log('Reload button was clicked');
+        // Socket.sendMsg('');
     }
     return (
         <div style={buttonStyle} onClick={reloadHandler}>Reload</div>
