@@ -54,8 +54,13 @@ export default class GameScene {
                             FindedObject.object.position.z
                         );
                         
-                        const target = new THREE.Vector3(...BATTLE_GROUND[5][4]);
-                        this.moveUnit(this.selectedObject,target);
+                        // Socket.sendMsg("reqPutCat", {
+                        //     from: dragging,
+                        //     to: event.target.id,
+                        // });
+
+                        // const target = new THREE.Vector3(...BATTLE_GROUND[5][4]);
+                        // this.moveUnit(this.selectedObject,target);
                         // this.throwBall(this.selectedObject,target);
                         this.selectedObject = null;
                     }

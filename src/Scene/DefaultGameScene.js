@@ -10,12 +10,14 @@ import Pawn from './CustomMeshClass/Pawn';
 import GameScene from './CustomMeshClass/GameScene';
 
 import {
+    BATTLE_GROUND,
     ENEMY_GROUND_FOR_ARRANGE,
     ENEMY_GROUND_FOR_BATTLE,
     ENEMY_GROUND_FOR_ITEM,
     MY_GROUND_FOR_ARRANGE,
     MY_GROUND_FOR_BATTLE,
     MY_GROUND_FOR_ITEM,
+    REVERSED_BATTLE_GROUND,
 } from './constant/Coordinates';
 
 import {
@@ -27,12 +29,17 @@ import {
 import GroundForItem from './CustomMeshClass/GroundForItem';
 import Item from './CustomMeshClass/Item';
 
-export default function DefaultGameScene({ windowWidth, windowHeight, board }) {
+export default function DefaultGameScene({ windowWidth, windowHeight, board, battleBoard }) {
     const containerRef = useRef();
     const gameSceneRef = useRef();
-    const [대기석, set대기석] = useState([]);
+    const initial대기석 = Array(MY_GROUND_FOR_ARRANGE.length).fill(null);
     const initial배틀석 = Array(MY_GROUND_FOR_BATTLE.length).fill(null).map(() => Array(MY_GROUND_FOR_BATTLE[0].length).fill(null));
+    const initial전체배틀석 = Array(BATTLE_GROUND.length).fill(null).map(() => Array(BATTLE_GROUND[0].length).fill(null));
+    const [대기석, set대기석] = useState(initial대기석);
     const [배틀석, set배틀석] = useState(initial배틀석);
+    const [전체배틀석, set전체배틀석] = useState(initial전체배틀석);
+    const [전체배틀석Reversed, set전체배틀석Reversed] = useState(initial전체배틀석);
+
     useEffect(() => {
         const gameScene = new GameScene(windowWidth, windowHeight);
         gameSceneRef.current = gameScene
@@ -113,9 +120,9 @@ export default function DefaultGameScene({ windowWidth, windowHeight, board }) {
             array.forEach((position, column) => {
                 if (배틀석 && 배틀석[row] && 배틀석[row][column]) {
                     gameSceneRef.current.scene.remove(배틀석[row][column].mesh);
-                 }
+                }
                 if (board?.board[row][column] != 'null' && board?.board[row][column] != undefined) {
-                    const newPosition = [position[0],position[1]+4,position[2]]
+                    const newPosition = [position[0], position[1] + 4, position[2]]
                     const pawnWhite = new Pawn(newPosition, gameSceneRef.current.camera.quaternion, board?.board[row][column]);
                     gameSceneRef.current.scene.add(pawnWhite.mesh);
                     set배틀석(prevState => {
@@ -130,7 +137,56 @@ export default function DefaultGameScene({ windowWidth, windowHeight, board }) {
 
     useEffect(() => {
 
-    }, [])
+        if (battleBoard?.reversed == true) {
+            // console.log(REVERSED_BATTLE_GROUND);
+            // REVERSED_BATTLE_GROUND.forEach((array, row) => {
+            //     array.forEach((position, column) => {
+            //         if (배틀석 && 배틀석[row] && 배틀석[row][column]) {
+            //             gameSceneRef.current.scene.remove(배틀석[row][column].mesh);
+            //         }
+            //         if (전체배틀석 && 전체배틀석[row] && 전체배틀석[row][column]) {
+            //             gameSceneRef.current.scene.remove(전체배틀석[row][column].mesh);
+            //         }
+            //         if (battleBoard?.board[row][column] != 'null' && battleBoard?.board[row][column] != undefined) {
+            //             const newPosition = [position[0], position[1] + 4, position[2]]
+            //             const pawnWhite = new Pawn(newPosition, gameSceneRef.current.camera.quaternion, battleBoard?.board[row][column]);
+            //             gameSceneRef.current.scene.add(pawnWhite.mesh);
+            //             set전체배틀석(prevState => {
+            //                 const newState = [...prevState];
+            //                 newState[row][column] = { data: battleBoard?.board[row][column], mesh: pawnWhite.mesh };
+            //                 return newState;
+            //             })
+
+            //         }
+            //     })
+            // })
+        }
+        else {
+            // console.log(BATTLE_GROUND);
+            // BATTLE_GROUND.forEach((array, row) => {
+            //     array.forEach((position, column) => {
+            //         if (배틀석 && 배틀석[row] && 배틀석[row][column]) {
+            //             gameSceneRef.current.scene.remove(배틀석[row][column].mesh);
+            //         }
+            //         if (전체배틀석 && 전체배틀석[row] && 전체배틀석[row][column]) {
+            //             gameSceneRef.current.scene.remove(전체배틀석[row][column].mesh);
+            //         }
+            //         if (battleBoard?.board[row][column] != null && battleBoard?.board[row][column] != undefined) {
+            //             const newPosition = [position[0], position[1] + 4, position[2]]
+            //             const pawnWhite = new Pawn(newPosition, gameSceneRef.current.camera.quaternion, battleBoard?.board[row][column]);
+            //             gameSceneRef.current.scene.add(pawnWhite.mesh);
+            //             set전체배틀석(prevState => {
+            //                 const newState = [...prevState];
+            //                 newState[row][column] = { data: battleBoard?.board[row][column], mesh: pawnWhite.mesh };
+            //                 return newState;
+            //             })
+
+            //         }
+            //     })
+            // })
+        }
+
+    }, [battleBoard])
 
     return <div ref={containerRef}></div>;
 }

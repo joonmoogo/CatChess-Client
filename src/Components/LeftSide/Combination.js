@@ -13,7 +13,7 @@ export default function Combination() {
         <>
             <div style={combinationStyle}>
                 <div id="image">Heal</div>
-                <div id="blood">{Math.round(Math.random() * 100 + 1)}</div>
+                <div id="blood">{1}</div>
             </div>
         </>
     )

@@ -42,6 +42,9 @@ function GUI({ children }) {
   const [board, setBoard] = useState();
   const [players, setPlayers] = useState([]);
   const [items, setItems] = useState();
+  const [battleBoard,setBattleBoard] = useState();
+  const [winning,setWinning]= useState();
+  const [losing,setLosing] = useState();
 
   useEffect(() => {
     const handleResize = () => {
@@ -118,6 +121,7 @@ function GUI({ children }) {
           break;
         }
         case "battleUpdate": {
+          setBattleBoard(msg.data);
           break;
         }
         case "battleResult": {
@@ -128,9 +132,15 @@ function GUI({ children }) {
           break;
         }
         case "winningUpdate": {
+          if(msg.data.player==localStorage.getItem('id')){
+            setWinning(msg.data.winning);
+          }
           break;
         }
         case "losingUpdate": {
+          if(msg.data.player==localStorage.getItem('id')){
+            setLosing(msg.data.losing);
+          }
           break;
         }
       }
@@ -156,6 +166,8 @@ function GUI({ children }) {
           level={level}
           exp={exp}
           money={money}
+          winning={winning}
+          losing={losing}
         />
         <TopSide
           windowWidth={windowWidth}
@@ -173,6 +185,7 @@ function GUI({ children }) {
         windowWidth,
         windowHeight,
         board,
+        battleBoard,
       })}
     </>
   );

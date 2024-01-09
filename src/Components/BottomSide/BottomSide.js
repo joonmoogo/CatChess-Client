@@ -7,7 +7,7 @@ import Money from "./Money";
 import Winning from "./Winning";
 import { Socket } from "../../Util/Socket/Socket";
 
-export default function BottomSide({ windowWidth, windowHeight, shop, level, exp, money }) {
+export default function BottomSide({ windowWidth, windowHeight, shop, level, exp, money,winning,losing }) {
 
   const scaleRatio = 1;
   const height = 150;
@@ -67,7 +67,7 @@ export default function BottomSide({ windowWidth, windowHeight, shop, level, exp
         <Money money={money}/>
     </div>
     <div style={winningBoxStyle}>
-        <Winning/>
+        <Winning winning={winning} losing={losing}/>
     </div>
     <div style={bottomSideStyle}>
       <div style={stackBoxStyle}>

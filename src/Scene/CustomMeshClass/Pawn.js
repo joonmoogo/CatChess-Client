@@ -5,8 +5,12 @@ import { 노란색, 초록색, 빨간색, 파란색, 보라색, 주황색, 핑�
 
 export default class Pawn {
     constructor(position, quaternion, property) {
-        const data = JSON.parse(property);
-        console.log(data);
+        let data;
+        try{
+            data=JSON.parse(property)
+        }catch{
+            data=property
+        }
 
         const catTypes = {
             'wildCat': { color: 노란색 },

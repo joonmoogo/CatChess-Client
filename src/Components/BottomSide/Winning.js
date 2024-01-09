@@ -1,6 +1,6 @@
 
 
-export default function Winning(){
+export default function Winning({winning,losing}){
     const buttonStyle = {
         color: 'white',
         border: '1px solid white',
@@ -26,7 +26,10 @@ export default function Winning(){
     return (
         <>
             <div style={buttonStyle} onClick={reloadHandler}>
-            <div style={textStyle}>🔥6</div>
+            <div style={textStyle}>
+                {winning&&winning!=0?<div>🔥{winning}</div>:null}
+                {losing&&losing!=0?<div>😭{losing}</div>:null}
+            </div>
             </div>
         </>
     )
