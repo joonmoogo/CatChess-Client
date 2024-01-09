@@ -1,13 +1,31 @@
 import * as THREE from 'three';
 import Arm from './Arm';
 import HealthBar from './HealthBar';
+import { 빨간색, 파란색 } from '../constant/Color'
+import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 
 export default class Pawn {
+    constructor(position, quaternion, property) {
+        const data = JSON.parse(property);
+        console.log(data);
 
-    constructor(position, color, quaternion, property) {
+        switch (data.id) {
+            case 'wildCat':
+                this.color = 빨간색
+                this.size = [2,4,2]
+                break;
+            case 'thiefCat':
+                this.color = 파란색
+                this.size = [2,4,2]
+                break;
+
+            // 모든 케이스 추가
+        }
+ 
         this.mesh = new THREE.Mesh(
-            new THREE.BoxGeometry(2, 4, 2),
-            new THREE.MeshStandardMaterial({ color })
+            new THREE.BoxGeometry(...this.size),
+            new THREE.MeshStandardMaterial({color: this.color})
         );
         this.mesh.receiveShadow = true;
         this.mesh.name = 'unit';
@@ -16,7 +34,6 @@ export default class Pawn {
         const healthBar = new HealthBar();
         this.mesh.add(arm.mesh);
         this.mesh.add(healthBar.mesh);
-        this.property = property
 
         function updateHealthBarPosition() {
             healthBar.mesh.position.set(0, 4, 0);

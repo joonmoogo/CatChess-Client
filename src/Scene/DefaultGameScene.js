@@ -49,10 +49,10 @@ export default function DefaultGameScene({ windowWidth, windowHeight, board }) {
         const enemyGround = new GroundForUnit([0, -1, -50], 노란색);
         gameScene.scene.add(enemyGround.mesh);
 
-        ENEMY_GROUND_FOR_ARRANGE.forEach((position) => {
-            const pawnWhite = new Pawn(position, 파란색, gameScene.camera.quaternion)
-            gameScene.scene.add(pawnWhite.mesh);
-        })
+        // ENEMY_GROUND_FOR_ARRANGE.forEach((position) => {
+        //     const pawnWhite = new Pawn(position, 파란색, gameScene.camera.quaternion)
+        //     gameScene.scene.add(pawnWhite.mesh);
+        // })
 
         MY_GROUND_FOR_BATTLE.forEach((array) => {
             array.forEach((position) => {
@@ -96,20 +96,21 @@ export default function DefaultGameScene({ windowWidth, windowHeight, board }) {
 
     useEffect(() => {
         MY_GROUND_FOR_ARRANGE.forEach((position, index) => {
-            console.log(대기석);
+            gameSceneRef.current.scene.remove(대기석[index]?.mesh)
             if (board?.queue[index] != 'null' && board?.queue[index] != undefined) {
-                if (대기석[index]?.data != board?.queue[index]) {
-                    gameSceneRef.current.scene.remove(대기석[index]?.mesh)
-                    const pawnWhite = new Pawn(position, 파란색, gameSceneRef.current.camera.quaternion)
-                    gameSceneRef.current.scene.add(pawnWhite.mesh);
-                    set대기석(prevState => {
-                        const newState = [...prevState];
-                        newState[index] = { data: board?.queue[index], mesh: pawnWhite.mesh };
-                        return newState;
-                    });
-                }
+                const pawnWhite = new Pawn(position, gameSceneRef.current.camera.quaternion, board?.queue[index]);
+                gameSceneRef.current.scene.add(pawnWhite.mesh);
+                set대기석(prevState => {
+                    const newState = [...prevState];
+                    newState[index] = { data: board?.queue[index], mesh: pawnWhite.mesh };
+                    return newState;
+                });
             }
         })
+
+        // MY_GROUND_FOR_BATTLE.forEach((position,index)=>{
+
+        // })
     }, [board]);
 
     useEffect(() => {
