@@ -1,31 +1,39 @@
 import * as THREE from 'three';
 import Arm from './Arm';
 import HealthBar from './HealthBar';
-import { 빨간색, 파란색 } from '../constant/Color'
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
-import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+import { 노란색, 초록색, 빨간색, 파란색, 보라색, 주황색, 핑크색, 갈색 } from '../constant/Color'
 
 export default class Pawn {
     constructor(position, quaternion, property) {
         const data = JSON.parse(property);
         console.log(data);
 
-        switch (data.id) {
-            case 'wildCat':
-                this.color = 빨간색
-                this.size = [2,4,2]
-                break;
-            case 'thiefCat':
-                this.color = 파란색
-                this.size = [2,4,2]
-                break;
+        const catTypes = {
+            'wildCat': { color: 노란색 },
+            'thiefCat': { color: 초록색 },
+            'tankCat': { color: 빨간색 },
+            'strongCat': { color: 파란색 },
+            'ssepCat': { color: 보라색 },
+            'assasinCat': { color: 주황색 },
+            'armorCat': { color: 핑크색 },
+            'adCat': { color: 갈색 }
+        };
 
-            // 모든 케이스 추가
+        const catType = catTypes[data.id] || catTypes['wildCat'];
+        this.color = catType.color;
+
+        if (data?.tier === 1) {
+            this.size = [2, 4, 2];
+        } else if (data.tier === 2) {
+            this.size = [3, 4, 3];
+        } else {
+            this.size = [4, 4, 4];
         }
- 
+
+
         this.mesh = new THREE.Mesh(
             new THREE.BoxGeometry(...this.size),
-            new THREE.MeshStandardMaterial({color: this.color})
+            new THREE.MeshStandardMaterial({ color: this.color })
         );
         this.mesh.receiveShadow = true;
         this.mesh.name = 'unit';

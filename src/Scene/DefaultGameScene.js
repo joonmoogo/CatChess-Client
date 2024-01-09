@@ -31,7 +31,8 @@ export default function DefaultGameScene({ windowWidth, windowHeight, board }) {
     const containerRef = useRef();
     const gameSceneRef = useRef();
     const [대기석, set대기석] = useState([]);
-
+    const initial배틀석 = Array(MY_GROUND_FOR_BATTLE.length).fill(null).map(() => Array(MY_GROUND_FOR_BATTLE[0].length).fill(null));
+    const [배틀석, set배틀석] = useState(initial배틀석);
     useEffect(() => {
         const gameScene = new GameScene(windowWidth, windowHeight);
         gameSceneRef.current = gameScene
@@ -108,9 +109,23 @@ export default function DefaultGameScene({ windowWidth, windowHeight, board }) {
             }
         })
 
-        // MY_GROUND_FOR_BATTLE.forEach((position,index)=>{
-
-        // })
+        MY_GROUND_FOR_BATTLE.forEach((array, row) => {
+            array.forEach((position, column) => {
+                if (배틀석 && 배틀석[row] && 배틀석[row][column]) {
+                    gameSceneRef.current.scene.remove(배틀석[row][column].mesh);
+                 }
+                if (board?.board[row][column] != 'null' && board?.board[row][column] != undefined) {
+                    const newPosition = [position[0],position[1]+4,position[2]]
+                    const pawnWhite = new Pawn(newPosition, gameSceneRef.current.camera.quaternion, board?.board[row][column]);
+                    gameSceneRef.current.scene.add(pawnWhite.mesh);
+                    set배틀석(prevState => {
+                        const newState = [...prevState];
+                        newState[row][column] = { data: board?.board[row][column], mesh: pawnWhite.mesh };
+                        return newState;
+                    });
+                }
+            });
+        });
     }, [board]);
 
     useEffect(() => {

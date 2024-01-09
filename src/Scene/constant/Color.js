@@ -7,7 +7,6 @@ export const 마룬색 = 0x800000;
 export const 어두운빨강 = 0x8b0000;
 
 // 갈색 계열
-export const 갈색 = 0xa52a2a;
 export const 시에나색 = 0xa0522d;
 export const 새들브라운 = 0x8b4513;
 
@@ -30,7 +29,6 @@ export const 초콜릿색 = 0xd2691e;
 
 // 노란색 계열
 export const 오렌지레드 = 0xff4500;
-export const 주황색 = 0xffa500;
 export const 어두운주황 = 0xff8c00;
 export const 황토색 = 0xd2b48c;
 
@@ -115,9 +113,14 @@ export const 어두운스페이트회색 = 0x2f4f4f;
 export const 블랙 = 0x000000;
 
 //마이 컬러
-export const 노란색 = 0xffff00
-export const 초록색 = 0xfff00
-export const 빨간색 = 0xff0000
-export const 파란색 = 0x0fffff
+export const 노란색 = 0xffff00;
+export const 초록색 = 0x00ff00;
+export const 빨간색 = 0xff0000;
+export const 파란색 = 0x0000ff;
+export const 보라색 = 0x800080; // 보라색 추가
+export const 주황색 = 0xffa500; // 주황색 추가
+export const 핑크색 = 0xffc0cb; // 핑크색 추가
+export const 갈색 = 0xa52a2a; // 갈색 추가
+
 
 // https://piera.tistory.com/187
