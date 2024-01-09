@@ -30,7 +30,7 @@ import Item from './CustomMeshClass/Item';
 export default function DefaultGameScene({ windowWidth, windowHeight, board }) {
     const containerRef = useRef();
     const gameSceneRef = useRef();
-    const 대기석 = [];
+    const [대기석, set대기석] = useState([]);
 
     useEffect(() => {
         const gameScene = new GameScene(windowWidth, windowHeight);
@@ -95,17 +95,26 @@ export default function DefaultGameScene({ windowWidth, windowHeight, board }) {
     }, []);
 
     useEffect(() => {
-        대기석.forEach((e)=>{
-            gameSceneRef.current.scene.remove(e)
-        })
         MY_GROUND_FOR_ARRANGE.forEach((position, index) => {
+            console.log(대기석);
             if (board?.queue[index] != 'null' && board?.queue[index] != undefined) {
-                const pawnWhite = new Pawn(position, 파란색, gameSceneRef.current.camera.quaternion)
-                gameSceneRef.current.scene.add(pawnWhite.mesh);
-                대기석.push(pawnWhite.mesh);
+                if (대기석[index]?.data != board?.queue[index]) {
+                    gameSceneRef.current.scene.remove(대기석[index]?.mesh)
+                    const pawnWhite = new Pawn(position, 파란색, gameSceneRef.current.camera.quaternion)
+                    gameSceneRef.current.scene.add(pawnWhite.mesh);
+                    set대기석(prevState => {
+                        const newState = [...prevState];
+                        newState[index] = { data: board?.queue[index], mesh: pawnWhite.mesh };
+                        return newState;
+                    });
+                }
             }
         })
-    }, [board])
+    }, [board]);
+
+    useEffect(() => {
+
+    }, [])
 
     return <div ref={containerRef}></div>;
 }
