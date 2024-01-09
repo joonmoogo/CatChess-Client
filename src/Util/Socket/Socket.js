@@ -18,7 +18,6 @@ export class Socket {
 
     static init() {
         Socket.socket = new WebSocket("ws://localhost:4000");
-
         Socket.socket.onopen = function (event) {
             console.log("웹 소켓 연결 성공");
         };

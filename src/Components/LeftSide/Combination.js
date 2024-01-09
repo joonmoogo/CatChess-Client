@@ -2,7 +2,7 @@ export default function Combination() {
     const combinationStyle = {
         border: '1px solid white',
         borderRadius: '100px',
-        width: '50px',
+        width: '60px',
         height: '50px',
         marginBottom: '20px',
         color: 'white',

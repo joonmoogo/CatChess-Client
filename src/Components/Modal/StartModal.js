@@ -37,6 +37,7 @@ export default function StartModal({ windowWidth, windowHeight }) {
 
     const handleCardClick=()=>{
         Socket.sendMsg("startWaiting", "");
+        if (!Socket.id) Socket.sendMsg("reqNewId", null);
     }
 
     return (

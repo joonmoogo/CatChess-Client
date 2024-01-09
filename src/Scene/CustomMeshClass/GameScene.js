@@ -55,7 +55,7 @@ export default class GameScene {
                         );
                         
                         const target = new THREE.Vector3(...BATTLE_GROUND[5][4]);
-                        // this.moveUnit(this.selectedObject,target);
+                        this.moveUnit(this.selectedObject,target);
                         // this.throwBall(this.selectedObject,target);
                         this.selectedObject = null;
                     }

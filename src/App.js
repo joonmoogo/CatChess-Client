@@ -40,6 +40,8 @@ function GUI({ children }) {
   const [hp, setHp] = useState();
   const [level, setLevel] = useState();
   const [board, setBoard] = useState();
+  const [players,setPlayers] = useState([]);
+  const [items,setItems] = useState();
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,9 +63,12 @@ function GUI({ children }) {
       const type = msg.type
       switch (type) {
         case "resNewId": {
+          localStorage.setItem('id',msg.data)
           break;
         }
         case "gameMatched": {
+          setPlayers(msg.data.players);
+          console.log(msg.data.players);
           break;
         }
         case "shopUpdate": {
@@ -140,6 +145,7 @@ function GUI({ children }) {
         <RightSide
           windowWidth={windowWidth}
           windowHeight={windowHeight}
+          players={players}
         />
         <BottomSide
           windowWidth={windowWidth}
@@ -154,6 +160,7 @@ function GUI({ children }) {
           windowHeight={windowHeight}
           time={time}
           stage={stage}
+          state={state}
         />
         <LeftSide
           windowWidth={windowWidth}

@@ -4,7 +4,7 @@ import HealthBar from './HealthBar';
 
 export default class Pawn {
 
-    constructor(position, color, quaternion) {
+    constructor(position, color, quaternion, property) {
         this.mesh = new THREE.Mesh(
             new THREE.BoxGeometry(2, 4, 2),
             new THREE.MeshStandardMaterial({ color })
@@ -16,6 +16,7 @@ export default class Pawn {
         const healthBar = new HealthBar();
         this.mesh.add(arm.mesh);
         this.mesh.add(healthBar.mesh);
+        this.property = property
 
         function updateHealthBarPosition() {
             healthBar.mesh.position.set(0, 4, 0);

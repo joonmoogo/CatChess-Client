@@ -22,6 +22,8 @@ export default function BottomSide({ windowWidth, windowHeight, shop, level, exp
     padding: "10px",
     color: "black",
     boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.1)",
+    // border:'1px solid white',
+    borderRadius:'10px',
     display: "flex", // 수정된 부분
     transform: `scale(${scaleRatio})`,
     transformOrigin: "bottom left",
