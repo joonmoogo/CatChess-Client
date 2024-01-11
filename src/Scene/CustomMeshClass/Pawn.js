@@ -4,14 +4,15 @@ import HealthBar from './HealthBar';
 import { 노란색, 초록색, 빨간색, 파란색, 보라색, 주황색, 핑크색, 갈색 } from '../constant/Color'
 
 export default class Pawn {
-    constructor(position, quaternion, property) {
+    constructor(position, scene, property) {
         let data;
-        try{
-            data=JSON.parse(property)
-        }catch{
-            data=property
+        try {
+            data = JSON.parse(property)
+        } catch {
+            data = property
         }
 
+        scene.units.push(this);
         const catTypes = {
             'wildCat': { color: 노란색 },
             'thiefCat': { color: 초록색 },
@@ -49,7 +50,7 @@ export default class Pawn {
 
         function updateHealthBarPosition() {
             healthBar.mesh.position.set(0, 4, 0);
-            healthBar.mesh.quaternion.copy(quaternion);
+            healthBar.mesh.quaternion.copy(scene.camera.quaternion);
             requestAnimationFrame(updateHealthBarPosition)
         }
         updateHealthBarPosition();

@@ -39,10 +39,10 @@ function GUI({ children }) {
   const [exp, setExp] = useState();
   const [hp, setHp] = useState();
   const [level, setLevel] = useState();
-  const [board, setBoard] = useState();
+  const [boardUpdate, setBoardUpdate] = useState();
   const [players, setPlayers] = useState([]);
   const [items, setItems] = useState();
-  const [battleBoard,setBattleBoard] = useState();
+  const [battleUpdate,setBattleBoard] = useState();
   const [winning,setWinning]= useState();
   const [losing,setLosing] = useState();
   const [battleMove,setBattleMove] = useState();
@@ -114,7 +114,7 @@ function GUI({ children }) {
         }
         case "boardUpdate": {
           if (msg.data.player == localStorage.getItem('id')) {
-            setBoard(msg.data);
+            setBoardUpdate(msg.data);
           }
           break;
         }
@@ -186,9 +186,10 @@ function GUI({ children }) {
       {React.cloneElement(children, {
         windowWidth,
         windowHeight,
-        board,
-        battleBoard,
+        boardUpdate,
+        battleUpdate,
         battleMove,
+        state,
       })}
     </>
   );

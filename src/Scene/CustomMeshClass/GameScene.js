@@ -4,6 +4,7 @@ import { BATTLE_GROUND } from '../constant/Coordinates';
 export default class GameScene {
 
     selectedObject = null;
+    units=[];
 
     constructor(width, height) {
         this.raycaster = new THREE.Raycaster();
