@@ -7,7 +7,7 @@ import Money from "./Money";
 import Winning from "./Winning";
 import { Socket } from "../../Util/Socket/Socket";
 
-export default function BottomSide({ windowWidth, windowHeight, shop, level, exp, money,winning,losing }) {
+export default function BottomSide({ windowWidth, windowHeight, shop, level, exp, money,winning,losing, }) {
 
   const scaleRatio = 1;
   const height = 150;

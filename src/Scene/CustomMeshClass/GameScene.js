@@ -53,7 +53,7 @@ export default class GameScene {
                             FindedObject.object.position.y + 4,
                             FindedObject.object.position.z
                         );
-                        
+
                         // Socket.sendMsg("reqPutCat", {
                         //     from: dragging,
                         //     to: event.target.id,
@@ -118,8 +118,9 @@ export default class GameScene {
     };
 
     moveUnit(unit, targetPosition) {
+        console.log('moveunit함수 실행')
         const gravity = new THREE.Vector3(0, -0.008, 0);
-        const jumpHeight = 20; // Adjust this value to control the jump height
+        const jumpHeight = 10; // Adjust this value to control the jump height
         const initialPosition = unit.position.clone();
         const initialVelocity = calculateInitialVelocity(initialPosition, targetPosition);
     

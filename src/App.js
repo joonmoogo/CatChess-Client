@@ -45,6 +45,7 @@ function GUI({ children }) {
   const [battleBoard,setBattleBoard] = useState();
   const [winning,setWinning]= useState();
   const [losing,setLosing] = useState();
+  const [battleMove,setBattleMove] = useState();
 
   useEffect(() => {
     const handleResize = () => {
@@ -79,7 +80,7 @@ function GUI({ children }) {
           break;
         }
         case "expUpdate": {
-          setExp(msg.data.exp);
+          setExp(msg.data);
           break;
         }
         case "levelUpdate": {
@@ -100,7 +101,8 @@ function GUI({ children }) {
         case "battle_attack": {
           break;
         }
-        case "battle_dead": {
+        case "battle_move": {
+          setBattleMove(msg.data);
           break;
         }
         case "itemUpdate": {
@@ -186,6 +188,7 @@ function GUI({ children }) {
         windowHeight,
         board,
         battleBoard,
+        battleMove,
       })}
     </>
   );
