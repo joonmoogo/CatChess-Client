@@ -123,6 +123,7 @@ export default function DefaultGameScene(
         newBoard = Array(MY_GROUND_FOR_BATTLE.length).fill(null).map(() => Array(BATTLE_GROUND[0].length).fill(null));
         boardUpdate.board.forEach(row =>{
             newBoard.push(row);
+
         });
 
         newBoard.forEach((row, i)=>{
@@ -174,11 +175,14 @@ export default function DefaultGameScene(
         })
     }, [battleUpdate])
 
-    useEffect(() => {
+    // useEffect(() => {
 
-    }, [state])
+    //     let unit;
+    //     gameSceneRef.current.units
+    //     const target = new THREE.Vector3(...BATTLE_GROUND[battleMove.nextY][battleMove.nextX])
+    // }, [state])
 
-    if(!battleMove) return
+    // if(!battleMove) return
 
     // 배틀석 ARRAY[3][5] 서버에서 받았던 데이터 저장하는 state
     // 전체배틀석 ARRAY[6][5] 서버에서 받았떤 데이터 저장하는 state
@@ -190,8 +194,8 @@ export default function DefaultGameScene(
     // battleUpdate.board = boardUpdate
     // battleUpdate.reversed = true or false
 
-    useEffect(() => {
-    }, [battleMove]);
+    // useEffect(() => {
+    // }, [battleMove]);
 
     // battleMove
     // beforeX = 2

@@ -5,7 +5,7 @@ import RightSide from './Components/RightSide/RightSide';
 import TopSide from './Components/TopSide/TopSide';
 import BottomSide from './Components/BottomSide/BottomSide';
 import DefaultGameScene from './Scene/DefaultGameScene';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useEffect, useState } from 'react';
 import CardModal from './Components/Modal/CardModal';
 import StartModal from './Components/Modal/StartModal';
@@ -42,10 +42,10 @@ function GUI({ children }) {
   const [boardUpdate, setBoardUpdate] = useState();
   const [players, setPlayers] = useState([]);
   const [items, setItems] = useState();
-  const [battleUpdate,setBattleBoard] = useState();
-  const [winning,setWinning]= useState();
-  const [losing,setLosing] = useState();
-  const [battleMove,setBattleMove] = useState();
+  const [battleUpdate, setBattleBoard] = useState();
+  const [winning, setWinning] = useState();
+  const [losing, setLosing] = useState();
+  const [battleMove, setBattleMove] = useState();
 
   useEffect(() => {
     const handleResize = () => {
@@ -134,13 +134,13 @@ function GUI({ children }) {
           break;
         }
         case "winningUpdate": {
-          if(msg.data.player==localStorage.getItem('id')){
+          if (msg.data.player == localStorage.getItem('id')) {
             setWinning(msg.data.winning);
           }
           break;
         }
         case "losingUpdate": {
-          if(msg.data.player==localStorage.getItem('id')){
+          if (msg.data.player == localStorage.getItem('id')) {
             setLosing(msg.data.losing);
           }
           break;
@@ -149,6 +149,41 @@ function GUI({ children }) {
     })
   }, [])
 
+  const memoizedRightSide = useMemo(() => {
+    return <RightSide windowHeight={windowHeight} windowWidth={windowWidth} players={players} />
+  }, [players])
+
+  const memoizedBottomSide = useMemo(() => {
+    return <BottomSide
+      windowWidth={windowWidth}
+      windowHeight={windowHeight}
+      shop={shop}
+      level={level}
+      exp={exp}
+      money={money}
+      winning={winning}
+      losing={losing} />
+  }, [shop, level, exp, money, winning, losing])
+
+  const memoizedTopSide = useMemo(() => {
+    return <TopSide
+      windowWidth={windowWidth}
+      windowHeight={windowHeight}
+      time={time}
+      stage={stage}
+      state={state} />
+  }, [time, stage, state])
+
+  const memoizedLeftSide = useMemo(() => {
+    return <LeftSide
+      windowWidth={windowWidth}
+      windowHeight={windowHeight}
+    />
+  }, [])
+
+
+
+
   return (
     <>
       <StartModal
@@ -156,32 +191,10 @@ function GUI({ children }) {
         windowHeight={windowHeight}
       />
       <div>
-        <RightSide
-          windowWidth={windowWidth}
-          windowHeight={windowHeight}
-          players={players}
-        />
-        <BottomSide
-          windowWidth={windowWidth}
-          windowHeight={windowHeight}
-          shop={shop}
-          level={level}
-          exp={exp}
-          money={money}
-          winning={winning}
-          losing={losing}
-        />
-        <TopSide
-          windowWidth={windowWidth}
-          windowHeight={windowHeight}
-          time={time}
-          stage={stage}
-          state={state}
-        />
-        <LeftSide
-          windowWidth={windowWidth}
-          windowHeight={windowHeight}
-        />
+        {memoizedRightSide}
+        {memoizedBottomSide}
+        {memoizedTopSide}
+        {memoizedLeftSide}
       </div>
       {React.cloneElement(children, {
         windowWidth,
